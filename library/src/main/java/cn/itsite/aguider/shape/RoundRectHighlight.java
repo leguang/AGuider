@@ -25,18 +25,40 @@ public class RoundRectHighlight implements Highlight {
     }
 
     public RoundRectHighlight(int width, int height, int padding, int radius) {
-        this.width = width;
-        this.height = height;
+        this.width = width + padding * 2;
+        this.height = height + padding * 2;
         this.padding = padding;
         this.radius = radius;
     }
 
     @Override
     public void draw(Canvas canvas, Paint paint, int x, int y) {
-        final int left = x - width / 2 - padding;
-        final int top = y - height / 2 - padding;
-        final int right = x + width / 2 + padding;
-        final int bottom = y + height / 2 + padding;
+        final int left = x - width / 2;
+        final int top = y - height / 2;
+        final int right = x + width / 2;
+        final int bottom = y + height / 2;
+        final RectF rectF = new RectF(left, top, right, bottom);
+        canvas.drawRoundRect(rectF, radius, radius, paint);
+    }
+
+    @Override
+    public void draw(Canvas canvas, Paint paint, int x, int y, int value) {
+        int left = x - value;
+        int top = y - value;
+        int right = x + value;
+        int bottom = y + value;
+        if (left < x - width / 2) {
+            left = x - width / 2;
+        }
+        if (top < y - height / 2) {
+            top = y - height / 2;
+        }
+        if (right > x + width / 2) {
+            right = x + width / 2;
+        }
+        if (bottom > y + height / 2) {
+            bottom = y + height / 2;
+        }
         final RectF rectF = new RectF(left, top, right, bottom);
         canvas.drawRoundRect(rectF, radius, radius, paint);
     }
@@ -73,5 +95,10 @@ public class RoundRectHighlight implements Highlight {
 
     public void setRadius(int radius) {
         this.radius = radius;
+    }
+
+    @Override
+    public int getMax() {
+        return Math.max(width, height);
     }
 }

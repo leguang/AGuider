@@ -20,17 +20,39 @@ public class RectHighlight implements Highlight {
     }
 
     public RectHighlight(int width, int height, int padding) {
-        this.width = width;
-        this.height = height;
+        this.width = width + padding * 2;
+        this.height = height + padding * 2;
         this.padding = padding;
     }
 
     @Override
     public void draw(Canvas canvas, Paint paint, int x, int y) {
-        final int left = x - width / 2 - padding;
-        final int top = y - height / 2 - padding;
-        final int right = x + width / 2 + padding;
-        final int bottom = y + height / 2 + padding;
+        final int left = x - width / 2;
+        final int top = y - height / 2;
+        final int right = x + width / 2;
+        final int bottom = y + height / 2;
+        final RectF rectF = new RectF(left, top, right, bottom);
+        canvas.drawRect(rectF, paint);
+    }
+
+    @Override
+    public void draw(Canvas canvas, Paint paint, int x, int y, int value) {
+        int left = x - value;
+        int top = y - value;
+        int right = x + value;
+        int bottom = y + value;
+        if (left < x - width / 2) {
+            left = x - width / 2;
+        }
+        if (top < y - height / 2) {
+            top = y - height / 2;
+        }
+        if (right > x + width / 2) {
+            right = x + width / 2;
+        }
+        if (bottom > y + height / 2) {
+            bottom = y + height / 2;
+        }
         final RectF rectF = new RectF(left, top, right, bottom);
         canvas.drawRect(rectF, paint);
     }
@@ -51,6 +73,11 @@ public class RectHighlight implements Highlight {
     @Override
     public int getHeight() {
         return height;
+    }
+
+    @Override
+    public int getMax() {
+        return Math.max(width, height);
     }
 
     public int getPadding() {

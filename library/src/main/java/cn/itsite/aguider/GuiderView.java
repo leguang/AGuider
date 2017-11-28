@@ -1,5 +1,7 @@
 package cn.itsite.aguider;
 
+import android.animation.TimeInterpolator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
@@ -13,6 +15,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
 import com.socks.library.KLog;
@@ -31,6 +34,7 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     private Paint mPaint;
     private int backgroundColor = 0xb2000000;
     private Guider.Builder builder;
+    private ValueAnimator animator;
 
     public GuiderView(@NonNull Context context) {
         this(context, null);
@@ -190,17 +194,23 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     @Override
     protected void onDraw(Canvas canvas) {
         KLog.e("onDraw………………………………………………………………");
-
         canvas.drawColor(builder.backgroundColor == 0 ? backgroundColor : builder.backgroundColor);
         if (builder.guides != null) {
             for (Guide guide : builder.guides) {
-                guide.getHighlight().draw(canvas, mPaint, guide.getX(), guide.getY());
+
+                if (animator != null) {
+                    guide.getHighlight().draw(canvas, mPaint, guide.getX(), guide.getY(), (int) animator.getAnimatedValue());
+
+                }
+
             }
         }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        KLog.e("onTouchEvent");
+
         return super.onTouchEvent(event);
     }
 
@@ -213,7 +223,44 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
 
 
         }
+    }
 
+    /**
+     * starts an animation to show.
+     *
+     * @param x         initial position x where the circle is showing up
+     * @param y         initial position y where the circle is showing up
+     * @param radius    radius of the circle
+     * @param duration  duration of the animation
+     * @param animation type of the animation
+     */
+    void turnUp(float x, float y, float radius, long duration, TimeInterpolator animation) {
+//        this.point.set(x, y);
+//        animator = ValueAnimator.ofFloat(0f, radius);
+//        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animation) {
+//                SpotlightView.this.invalidate();
+//            }
+//        });
+//        animator.setInterpolator(animation);
+//        animator.setDuration(duration);
+//        animator.start();
+    }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        KLog.e("onAttachedToWindow");
+        animator = ValueAnimator.ofInt(0, builder.guides.get(0).getHighlight().getMax());
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                GuiderView.this.invalidate();
+            }
+        });
+        animator.setInterpolator(new DecelerateInterpolator(2F));
+        animator.setDuration(5000);
+        animator.start();
     }
 }

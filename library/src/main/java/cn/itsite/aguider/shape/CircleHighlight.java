@@ -3,6 +3,8 @@ package cn.itsite.aguider.shape;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.socks.library.KLog;
+
 /**
  * @author leguang
  * @version v0.0.0
@@ -23,17 +25,26 @@ public class CircleHighlight implements Highlight {
         this.width = width;
         this.height = height;
         this.padding = padding;
-        this.radius = (int) Math.hypot((double) width, (double) height) / 2;
+        this.radius = ((int) Math.hypot((double) width, (double) height) / 2) + padding;
     }
 
     @Override
     public void draw(Canvas canvas, Paint paint, int x, int y) {
-        canvas.drawCircle(x, y, radius + padding, paint);
+        canvas.drawCircle(x, y, radius, paint);
+    }
+
+    @Override
+    public void draw(Canvas canvas, Paint paint, int x, int y, int value) {
+        KLog.e("value--" + value);
+        KLog.e("radius--" + radius);
+        if (value <= radius) {
+            canvas.drawCircle(x, y, value, paint);
+        }
     }
 
     @Override
     public int getWidth() {
-        return radius + padding;
+        return radius;
     }
 
     public void setWidth(int width) {
@@ -46,7 +57,12 @@ public class CircleHighlight implements Highlight {
 
     @Override
     public int getHeight() {
-        return radius + padding;
+        return radius;
+    }
+
+    @Override
+    public int getMax() {
+        return radius;
     }
 
     public int getRadius() {

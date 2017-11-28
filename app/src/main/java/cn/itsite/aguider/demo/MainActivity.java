@@ -15,7 +15,6 @@ import cn.itsite.aguider.AGuiderListener;
 import cn.itsite.aguider.Guide;
 import cn.itsite.aguider.Guider;
 import cn.itsite.aguider.position.Position;
-import cn.itsite.aguider.shape.CircleHighlight;
 import cn.itsite.aguider.shape.OvalHighlight;
 import cn.itsite.aguider.shape.RoundRectHighlight;
 
@@ -45,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final Guide guide0 = new Guide.Builder()
                         .setPoint(target0)
-                        .setHighlight(new CircleHighlight(target0.getWidth(), target0.getHeight()))
+                        .setHighlight(new OvalHighlight(target0.getWidth(), target0.getHeight(), 50))
                         .setPosition(Position.bottomLeft())
                         .setDescription(getDesView())
                         .build();

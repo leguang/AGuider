@@ -20,7 +20,12 @@ public interface Highlight {
      */
     void draw(Canvas canvas, Paint paint, int x, int y);
 
+    void draw(Canvas canvas, Paint paint, int x, int y,int value);
+
     int getWidth();
 
     int getHeight();
+
+    int getMax();
+
 }
