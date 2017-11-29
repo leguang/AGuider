@@ -7,14 +7,13 @@ package cn.itsite.aguider.position;
  * @time 2017/11/27 0027 18:56
  */
 public class Bottom implements IPosition {
-
     @Override
-    public int left(int x, int widthRadius, int width) {
+    public int left(int x, int highlightWidth, int width) {
         return x - width / 2;
     }
 
     @Override
-    public int top(int y, int heightRadius, int height) {
-        return y + heightRadius;
+    public int top(int y, int highlightHeight, int height) {
+        return y + highlightHeight / 2;
     }
 }

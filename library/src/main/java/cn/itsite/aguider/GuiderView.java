@@ -31,7 +31,6 @@ import cn.itsite.aguider.position.IPosition;
 public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobalLayoutListener {
     private static final String TAG = GuiderView.class.getSimpleName();
     private Paint mPaint;
-    private int backgroundColor = 0xB0000000;
     private Guider.Builder builder;
     private Guide currentGuide;
     private int index = 0;
@@ -117,7 +116,7 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
                 IPosition position = currentGuide.getPosition();
                 final int x = currentGuide.getX();
                 final int y = currentGuide.getY();
-                IHighlight highlight = currentGuide.getIHighlight();
+                IHighlight highlight = currentGuide.getHighlight();
                 final int childLeft = position.left(x, highlight.getWidth(), width) + lp.leftMargin;
                 final int childTop = position.top(y, highlight.getHeight(), height) + lp.topMargin;
                 final int childRight = childLeft + width - lp.rightMargin;
@@ -135,19 +134,17 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     @Override
     protected void onDraw(Canvas canvas) {
         KLog.e("onDraw………………………………………………………………");
-        canvas.drawColor(builder.backgroundColor == 0 ? backgroundColor : builder.backgroundColor);
+        canvas.drawColor(currentGuide.getBackgroundColor());
 //        if (builder.guides != null) {
 //            for (Guide guide : builder.guides) {
 //                if (builder.guides.get(0).getAnimator() != null) {
-//                    guide.getIHighlight().draw(canvas, mPaint, guide.getX(), guide.getY(), (int) builder.guides.get(0).getAnimator().getAnimatedValue());
-//
+//                    guide.getHighlight().draw(canvas, mPaint, guide.getX(), guide.getY(), (int) builder.guides.get(0).getAnimator().getAnimatedValue());
 //                }
-//
 //            }
 //        }
 
         if (currentGuide.getAnimator() != null) {
-            currentGuide.getIHighlight().draw(canvas, mPaint, currentGuide.getX(), currentGuide.getY(), (int) currentGuide.getAnimator().getAnimatedValue());
+            currentGuide.getHighlight().draw(canvas, mPaint, currentGuide.getX(), currentGuide.getY(), (int) currentGuide.getAnimator().getAnimatedValue());
         }
     }
 
@@ -180,7 +177,9 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
                     currentGuide.getAnimator().addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
                         public void onAnimationUpdate(ValueAnimator animation) {
-                            invalidate();
+//                            invalidate();
+                            postInvalidate();
+
                         }
                     });
                     currentGuide.getAnimator().start();
@@ -223,7 +222,8 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
         currentGuide.getAnimator().addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                invalidate();
+//                invalidate();
+                postInvalidate();
             }
         });
         currentGuide.getAnimator().start();

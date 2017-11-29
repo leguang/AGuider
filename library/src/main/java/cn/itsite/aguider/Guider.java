@@ -72,7 +72,6 @@ public class Guider {
         AGuiderListener.OnGuidertStartListener onGuidertStartListener;
         AGuiderListener.OnGuidertStopListener onGuidertStopListener;
         List<Guide> guides = new ArrayList<>();
-        int backgroundColor;
 
         public Builder() {
         }
@@ -96,11 +95,6 @@ public class Guider {
 
         public Builder addGuides(@NonNull Guide... guides) {
             this.guides.addAll(Arrays.asList(guides));
-            return this;
-        }
-
-        public Builder background(@ColorInt int backgroundColor) {
-            this.backgroundColor = backgroundColor;
             return this;
         }
 

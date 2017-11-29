@@ -8,6 +8,10 @@ package cn.itsite.aguider.position;
  */
 public class Position {
 
+    public static IPosition center() {
+        return new Center();
+    }
+
     public static IPosition left() {
         return new Left();
     }

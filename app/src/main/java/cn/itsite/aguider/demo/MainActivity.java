@@ -14,9 +14,9 @@ import android.widget.TextView;
 import cn.itsite.aguider.AGuiderListener;
 import cn.itsite.aguider.Guide;
 import cn.itsite.aguider.Guider;
-import cn.itsite.aguider.position.Position;
 import cn.itsite.aguider.highlight.OvalHighlight;
-import cn.itsite.aguider.highlight.RoundRectHighlight;
+import cn.itsite.aguider.highlight.RectHighlight;
+import cn.itsite.aguider.position.Position;
 
 /**
  * @author leguang
@@ -44,23 +44,25 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final Guide guide0 = new Guide.Builder()
                         .setPoint(target0)
-                        .setIHighlight(new OvalHighlight(target0.getWidth(), target0.getHeight()))
-                        .setPosition(Position.right())
+                        .setHighlight(new OvalHighlight(target0.getWidth(), target0.getHeight()))
                         .setDescription(getDesView("000000000"))
+                        .setBackground(0x90FF0000)
                         .build();
 
                 final Guide guide1 = new Guide.Builder()
                         .setPoint(target1)
                         .setPosition(Position.bottom())
-                        .setIHighlight(new OvalHighlight(target1.getWidth(), target1.getHeight()))
+                        .setHighlight(new OvalHighlight(target1.getWidth(), target1.getHeight()))
                         .setDescription(getDesView("111111"))
+                        .setBackground(0x9000FF00)
                         .build();
 
                 final Guide guide2 = new Guide.Builder()
                         .setPoint(target2)
-                        .setPosition(Position.top())
-                        .setIHighlight(new RoundRectHighlight(target2.getWidth(), target2.getHeight()))
+                        .setPosition(Position.topleft())
+                        .setHighlight(new RectHighlight(target2.getWidth(), target2.getHeight()))
                         .setDescription(getDesView("2222222222"))
+                        .setBackground(0x900000FF)
                         .build();
 
                 new Guider.Builder()

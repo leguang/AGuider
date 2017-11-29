@@ -8,7 +8,7 @@ package cn.itsite.aguider.position;
  */
 public interface IPosition {
 
-    int left(int x, int widthRadius, int width);
+    int left(int x, int highlightWidth, int width);
 
-    int top(int y, int heightRadius, int height);
+    int top(int y, int highlightHeight, int height);
 }
