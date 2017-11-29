@@ -1,4 +1,4 @@
-package cn.itsite.aguider.shape;
+package cn.itsite.aguider.highlight;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -11,7 +11,7 @@ import com.socks.library.KLog;
  * @E-mail langmanleguang@qq.com
  * @time 2016/11/24 0024 9:08
  */
-public class CircleHighlight implements Highlight {
+public class CircleHighlight implements IHighlight {
     public int width;
     public int height;
     public int padding;

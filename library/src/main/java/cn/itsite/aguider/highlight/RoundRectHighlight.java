@@ -1,4 +1,4 @@
-package cn.itsite.aguider.shape;
+package cn.itsite.aguider.highlight;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -10,19 +10,25 @@ import android.graphics.RectF;
  * @E-mail langmanleguang@qq.com
  * @time 2016/11/24 0024 9:08
  */
-public class OvalHighlight implements Highlight {
+public class RoundRectHighlight implements IHighlight {
     public int width;
     public int height;
     public int padding;
+    public int radius;
 
-    public OvalHighlight(int width, int height) {
+    public RoundRectHighlight(int width, int height) {
         this(width, height, 0);
     }
 
-    public OvalHighlight(int width, int height, int padding) {
+    public RoundRectHighlight(int width, int height, int padding) {
+        this(width, height, padding, 0);
+    }
+
+    public RoundRectHighlight(int width, int height, int padding, int radius) {
         this.width = width + padding * 2;
         this.height = height + padding * 2;
         this.padding = padding;
+        this.radius = radius;
     }
 
     @Override
@@ -32,7 +38,7 @@ public class OvalHighlight implements Highlight {
         final int right = x + width / 2;
         final int bottom = y + height / 2;
         final RectF rectF = new RectF(left, top, right, bottom);
-        canvas.drawOval(rectF, paint);
+        canvas.drawRoundRect(rectF, radius, radius, paint);
     }
 
     @Override
@@ -54,7 +60,7 @@ public class OvalHighlight implements Highlight {
             bottom = y + height / 2;
         }
         final RectF rectF = new RectF(left, top, right, bottom);
-        canvas.drawOval(rectF, paint);
+        canvas.drawRoundRect(rectF, radius, radius, paint);
     }
 
     public void setWidth(int width) {
@@ -75,16 +81,24 @@ public class OvalHighlight implements Highlight {
         return height;
     }
 
-    @Override
-    public int getMax() {
-        return Math.max(width, height);
-    }
-
     public int getPadding() {
         return padding;
     }
 
     public void setPadding(int padding) {
         this.padding = padding;
+    }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    @Override
+    public int getMax() {
+        return Math.max(width, height);
     }
 }

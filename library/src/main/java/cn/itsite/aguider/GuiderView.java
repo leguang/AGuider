@@ -1,6 +1,5 @@
 package cn.itsite.aguider;
 
-import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.BlurMaskFilter;
@@ -14,14 +13,14 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
 import com.socks.library.KLog;
 
+import cn.itsite.aguider.highlight.IHighlight;
 import cn.itsite.aguider.position.IPosition;
-import cn.itsite.aguider.shape.Highlight;
 
 /**
  * @author leguang
@@ -32,9 +31,10 @@ import cn.itsite.aguider.shape.Highlight;
 public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobalLayoutListener {
     private static final String TAG = GuiderView.class.getSimpleName();
     private Paint mPaint;
-    private int backgroundColor = 0xb2000000;
+    private int backgroundColor = 0xB0000000;
     private Guider.Builder builder;
-    private ValueAnimator animator;
+    private Guide currentGuide;
+    private int index = 0;
 
     public GuiderView(@NonNull Context context) {
         this(context, null);
@@ -68,10 +68,13 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
 
     @Override
     public void onGlobalLayout() {
+
+        KLog.e("onGlobalLayout");
+
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                KLog.e("onGlobalLayoutonGlobalLayout");
+                KLog.e("getViewTreeObserver()-->onGlobalLayout");
             }
         });
     }
@@ -90,102 +93,40 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        KLog.e("changed--" + changed + "  left--" + left + "  top--" + top + "  right--" + right + "  bottom--" + bottom);
-        KLog.e("getMeasuredWidth()--" + getMeasuredWidth());
-        KLog.e("getMeasuredHeight()--" + getMeasuredHeight());
-        KLog.e("getWidth()--" + getWidth());
-        KLog.e("getHeight()--" + getHeight());
-        KLog.e("getChildAt(0).getMeasuredWidth()--" + getChildAt(0).getMeasuredWidth());
-        KLog.e("getChildAt(0).getMeasuredHeight()--" + getChildAt(0).getMeasuredHeight());
-        KLog.e("getChildAt(0).getWidth()--" + getChildAt(0).getWidth());
-        KLog.e("getChildAt(0).getHeight()--" + getChildAt(0).getHeight());
-//        for (Guide guide : builder.guides) {
-//            View view = guide.getDescriptionView();
-//            view.setX(guide.getX());
-//            view.setY(guide.getY());
-//        }
+        KLog.e("changed:" + changed + "  left:" + left + "  top：" + top + "  right：" + right + "  bottom：" + bottom);
+        KLog.e("getMeasuredWidth():" + getMeasuredWidth());
+        KLog.e("getMeasuredHeight():" + getMeasuredHeight());
+        KLog.e("getWidth():" + getWidth());
+        KLog.e("getHeight():" + getHeight());
 
-//        inflate()
+        if (getChildCount() > 0) {
+            KLog.e("getChildAt(0).getMeasuredWidth():" + getChildAt(0).getMeasuredWidth());
+            KLog.e("getChildAt(0).getMeasuredHeight():" + getChildAt(0).getMeasuredHeight());
+            KLog.e("getChildAt(0).getWidth():" + getChildAt(0).getWidth());
+            KLog.e("getChildAt(0).getHeight():" + getChildAt(0).getHeight());
+        }
 
 
         final int count = getChildCount();
-
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
             if (child.getVisibility() != GONE) {
                 final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-
                 final int width = child.getWidth();
                 final int height = child.getHeight();
-
-                KLog.e("lp.leftMargin--" + lp.leftMargin);
-                KLog.e("lp.topMargin--" + lp.topMargin);
-
-
-                //左上角
-//                final int childLeft = builder.guides.get(i).getX() - builder.guides.get(i).getHighlight().getWidth() - width + lp.leftMargin;
-//                final int childTop = builder.guides.get(i).getY() - builder.guides.get(i).getHighlight().getHeight() - height + lp.topMargin;
-//                final int childRight = childLeft + width - lp.rightMargin;
-//                final int childBottom = childTop + height - lp.bottomMargin;
-
-                //上边
-//                final int childLeft = builder.guides.get(i).getX() - width / 2 + lp.leftMargin;
-//                final int childTop = builder.guides.get(i).getY() - builder.guides.get(i).getHighlight().getHeight() - height + lp.topMargin;
-//                final int childRight = childLeft + width - lp.rightMargin;
-//                final int childBottom = childTop + height - lp.bottomMargin;
-
-                //右上角
-//                final int childLeft = builder.guides.get(i).getX() + builder.guides.get(i).getHighlight().getWidth() + lp.leftMargin;
-//                final int childTop = builder.guides.get(i).getY() - builder.guides.get(i).getHighlight().getHeight() - height + lp.topMargin;
-//                final int childRight = childLeft + width - lp.rightMargin;
-//                final int childBottom = childTop + height - lp.bottomMargin;
-
-                //右边
-//                final int childLeft = builder.guides.get(i).getX() + builder.guides.get(i).getHighlight().getWidth() + lp.leftMargin;
-//                final int childTop = builder.guides.get(i).getY() - height / 2 + lp.topMargin;
-//                final int childRight = childLeft + width - lp.rightMargin;
-//                final int childBottom = childTop + height - lp.bottomMargin;
-
-                //右下角
-//                final int childLeft = builder.guides.get(i).getX() + builder.guides.get(i).getHighlight().getWidth() + lp.leftMargin;
-//                final int childTop = builder.guides.get(i).getY() + builder.guides.get(i).getHighlight().getHeight() + lp.topMargin;
-//                final int childRight = childLeft + width - lp.rightMargin;
-//                final int childBottom = childTop + height - lp.bottomMargin;
-
-                //下边
-//                final int childLeft = builder.guides.get(i).getX() - width / 2 + lp.leftMargin;
-//                final int childTop = builder.guides.get(i).getY() + builder.guides.get(i).getHighlight().getHeight() - lp.topMargin;
-//                final int childRight = childLeft + width - lp.rightMargin;
-//                final int childBottom = childTop + height - lp.bottomMargin;
-
-                //左下边
-//                final int childLeft = builder.guides.get(i).getX() - builder.guides.get(i).getHighlight().getWidth() - width + lp.leftMargin;
-//                final int childTop = builder.guides.get(i).getY() + builder.guides.get(i).getHighlight().getHeight() + lp.topMargin;
-//                final int childRight = childLeft + width - lp.rightMargin;
-//                final int childBottom = childTop + height - lp.bottomMargin;
-
-                //左边
-//                final int childLeft = builder.guides.get(i).getX() - builder.guides.get(i).getHighlight().getWidth() - width + lp.leftMargin;
-//                final int childTop = builder.guides.get(i).getY() - height / 2 + lp.topMargin;
-//                final int childRight = childLeft + width - lp.rightMargin;
-//                final int childBottom = childTop + height - lp.bottomMargin;
-
-                Guide guide = builder.guides.get(i);
-                IPosition position = guide.getPosition();
-                int x = guide.getX();
-                int y = guide.getY();
-                Highlight highlight = guide.getHighlight();
+                IPosition position = currentGuide.getPosition();
+                final int x = currentGuide.getX();
+                final int y = currentGuide.getY();
+                IHighlight highlight = currentGuide.getIHighlight();
                 final int childLeft = position.left(x, highlight.getWidth(), width) + lp.leftMargin;
-                final int childTop = position.top(y, highlight.getHeight(), height);
+                final int childTop = position.top(y, highlight.getHeight(), height) + lp.topMargin;
                 final int childRight = childLeft + width - lp.rightMargin;
                 final int childBottom = childTop + height - lp.bottomMargin;
 
-
-                KLog.e("childLeft--" + childLeft);
-                KLog.e("childTop--" + childTop);
-                KLog.e("childRight--" + childRight);
-                KLog.e("childBottom--" + childBottom);
-
+                KLog.e("childLeft:" + childLeft);
+                KLog.e("childTop:" + childTop);
+                KLog.e("childRight:" + childRight);
+                KLog.e("childBottom:" + childBottom);
                 child.layout(childLeft, childTop, childRight, childBottom);
             }
         }
@@ -195,72 +136,108 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     protected void onDraw(Canvas canvas) {
         KLog.e("onDraw………………………………………………………………");
         canvas.drawColor(builder.backgroundColor == 0 ? backgroundColor : builder.backgroundColor);
-        if (builder.guides != null) {
-            for (Guide guide : builder.guides) {
+//        if (builder.guides != null) {
+//            for (Guide guide : builder.guides) {
+//                if (builder.guides.get(0).getAnimator() != null) {
+//                    guide.getIHighlight().draw(canvas, mPaint, guide.getX(), guide.getY(), (int) builder.guides.get(0).getAnimator().getAnimatedValue());
+//
+//                }
+//
+//            }
+//        }
 
-                if (animator != null) {
-                    guide.getHighlight().draw(canvas, mPaint, guide.getX(), guide.getY(), (int) animator.getAnimatedValue());
-
-                }
-
-            }
+        if (currentGuide.getAnimator() != null) {
+            currentGuide.getIHighlight().draw(canvas, mPaint, currentGuide.getX(), currentGuide.getY(), (int) currentGuide.getAnimator().getAnimatedValue());
         }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        KLog.e("onTouchEvent");
+        KLog.e("onTouchEvent-----index::" + index);
 
+        if (builder.guides != null && !builder.guides.isEmpty()) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    removeView(currentGuide.getDescriptionView());
+                    ++index;
+                    KLog.e("_DOWN++index---" + index);
+                    if (index < builder.guides.size()) {
+                        currentGuide = builder.guides.get(index);
+                    }
+
+                    if (index == builder.guides.size()) {
+                        removeAllViews();
+                        if (getParent() instanceof ViewGroup) {
+                            KLog.e("移除这个GuiderView。。。");
+                            ((ViewGroup) getParent()).removeView(this);
+                        }
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    KLog.e("_UP++index---" + index);
+                    addView(currentGuide.getDescriptionView());
+
+                    currentGuide.getAnimator().addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            invalidate();
+                        }
+                    });
+                    currentGuide.getAnimator().start();
+                    break;
+                default:
+                    KLog.e("ACTION^^^^其他");
+            }
+            return true;
+        }
         return super.onTouchEvent(event);
     }
 
     public void initData(Guider.Builder builder) {
+        KLog.e("initData..");
+
         this.builder = builder;
 
-        for (Guide guide : builder.guides) {
-            addView(guide.getDescriptionView());
-            KLog.e("initData");
+//        for (Guide guide : builder.guides) {
+//            addView(guide.getDescriptionView());
+//            KLog.e("initData");
+//
+//
+//        }
 
-
+        if (builder.guides != null && !builder.guides.isEmpty()) {
+            currentGuide = builder.guides.get(index);
+            addView(currentGuide.getDescriptionView());
+            KLog.e("initData---添加了一个xml描述。。。");
         }
-    }
-
-    /**
-     * starts an animation to show.
-     *
-     * @param x         initial position x where the circle is showing up
-     * @param y         initial position y where the circle is showing up
-     * @param radius    radius of the circle
-     * @param duration  duration of the animation
-     * @param animation type of the animation
-     */
-    void turnUp(float x, float y, float radius, long duration, TimeInterpolator animation) {
-//        this.point.set(x, y);
-//        animator = ValueAnimator.ofFloat(0f, radius);
-//        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-//            @Override
-//            public void onAnimationUpdate(ValueAnimator animation) {
-//                SpotlightView.this.invalidate();
-//            }
-//        });
-//        animator.setInterpolator(animation);
-//        animator.setDuration(duration);
-//        animator.start();
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         KLog.e("onAttachedToWindow");
-        animator = ValueAnimator.ofInt(0, builder.guides.get(0).getHighlight().getMax());
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        /**
+         * 考虑这里是否可以作为启动Guider的标志，如果可以就把监听器掉这里。
+         */
+
+        currentGuide.getAnimator().addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                GuiderView.this.invalidate();
+                invalidate();
             }
         });
-        animator.setInterpolator(new DecelerateInterpolator(2F));
-        animator.setDuration(5000);
-        animator.start();
+        currentGuide.getAnimator().start();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+
+        KLog.e("onDetachedFromWindow...");
+        /**
+         * 考虑结束的回调因不应该出现在这里。
+         * 因为要看一下如果Activity返回桌面的时候会不会调用这里。如果不会，那就可以把这个当做从decorView中Remove的标志。
+         */
+
     }
 }

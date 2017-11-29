@@ -1,4 +1,4 @@
-package cn.itsite.aguider.shape;
+package cn.itsite.aguider.highlight;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -10,16 +10,16 @@ import android.graphics.RectF;
  * @E-mail langmanleguang@qq.com
  * @time 2016/11/24 0024 9:08
  */
-public class RectHighlight implements Highlight {
+public class OvalHighlight implements IHighlight {
     public int width;
     public int height;
     public int padding;
 
-    public RectHighlight(int width, int height) {
+    public OvalHighlight(int width, int height) {
         this(width, height, 0);
     }
 
-    public RectHighlight(int width, int height, int padding) {
+    public OvalHighlight(int width, int height, int padding) {
         this.width = width + padding * 2;
         this.height = height + padding * 2;
         this.padding = padding;
@@ -32,7 +32,7 @@ public class RectHighlight implements Highlight {
         final int right = x + width / 2;
         final int bottom = y + height / 2;
         final RectF rectF = new RectF(left, top, right, bottom);
-        canvas.drawRect(rectF, paint);
+        canvas.drawOval(rectF, paint);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class RectHighlight implements Highlight {
             bottom = y + height / 2;
         }
         final RectF rectF = new RectF(left, top, right, bottom);
-        canvas.drawRect(rectF, paint);
+        canvas.drawOval(rectF, paint);
     }
 
     public void setWidth(int width) {

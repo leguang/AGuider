@@ -61,6 +61,7 @@ public class Guider {
             guiderView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
 
+            root.getViewTreeObserver().addOnGlobalLayoutListener(guiderView);
             root.addView(guiderView);
         }
         return this;

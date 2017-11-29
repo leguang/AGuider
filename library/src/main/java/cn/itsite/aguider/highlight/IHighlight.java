@@ -1,4 +1,4 @@
-package cn.itsite.aguider.shape;
+package cn.itsite.aguider.highlight;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -13,7 +13,7 @@ import android.graphics.Paint;
  * Implementations of this interface will be responsible to draw the shape
  * at specified center point (x, y).
  */
-public interface Highlight {
+public interface IHighlight {
 
     /**
      * Draw shape on the canvas with the center at (x, y) using Paint object provided.

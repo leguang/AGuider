@@ -1,12 +1,14 @@
 package cn.itsite.aguider;
 
+import android.animation.ValueAnimator;
 import android.graphics.Point;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 
+import cn.itsite.aguider.highlight.IHighlight;
 import cn.itsite.aguider.position.IPosition;
-import cn.itsite.aguider.shape.Highlight;
 
 /**
  * @author leguang
@@ -18,23 +20,25 @@ public class Guide implements IGuide {
     private int x;
     private int y;
     private IPosition position;
-    private Highlight highlight;
+    private IHighlight IHighlight;
     private View targetView;
     private int targetLayoutId;
     private View descriptionView;
     private int descriptionLayoutId;
     private AGuiderListener.OnGuideListener listener;
+    private ValueAnimator animator;
 
     public Guide(Builder builder) {
         this.x = builder.x;
         this.y = builder.y;
         this.position = builder.position;
-        this.highlight = builder.highlight;
+        this.IHighlight = builder.IHighlight;
         this.targetView = builder.targetView;
         this.targetLayoutId = builder.targetLayoutId;
         this.descriptionView = builder.descriptionView;
         this.descriptionLayoutId = builder.descriptionLayoutId;
         this.listener = builder.listener;
+        this.animator = builder.animator;
     }
 
     public AGuiderListener.OnGuideListener getListener() {
@@ -65,12 +69,12 @@ public class Guide implements IGuide {
         this.position = position;
     }
 
-    public Highlight getHighlight() {
-        return highlight;
+    public IHighlight getIHighlight() {
+        return IHighlight;
     }
 
-    public void setHighlight(Highlight highlight) {
-        this.highlight = highlight;
+    public void setIHighlight(IHighlight IHighlight) {
+        this.IHighlight = IHighlight;
     }
 
     public View getTargetView() {
@@ -109,6 +113,14 @@ public class Guide implements IGuide {
         this.listener = listener;
     }
 
+    public ValueAnimator getAnimator() {
+        return animator;
+    }
+
+    public void setAnimator(ValueAnimator animator) {
+        this.animator = animator;
+    }
+
     /**
      * Builder class which makes it easier to create {@link Guide}
      */
@@ -116,15 +128,16 @@ public class Guide implements IGuide {
         int x;
         int y;
         IPosition position;
-        Highlight highlight;
+        IHighlight IHighlight;
         int targetLayoutId;
         View targetView;
         int descriptionLayoutId;
         View descriptionView;
         AGuiderListener.OnGuideListener listener;
+        ValueAnimator animator;
 
         /**
-         * Sets the initial position of highlight
+         * Sets the initial position of IHighlight
          *
          * @param y starting position of y where spotlight reveals
          * @param x starting position of x where spotlight reveals
@@ -137,7 +150,7 @@ public class Guide implements IGuide {
         }
 
         /**
-         * Sets the initial position of highlight
+         * Sets the initial position of IHighlight
          *
          * @param point starting position where spotlight reveals
          * @return This Builder
@@ -147,7 +160,7 @@ public class Guide implements IGuide {
         }
 
         /**
-         * Sets the initial position of highlight
+         * Sets the initial position of IHighlight
          * Make sure the view already has a fixed position
          *
          * @param view starting position where spotlight reveals
@@ -166,10 +179,13 @@ public class Guide implements IGuide {
             return this;
         }
 
-        public Builder setHighlight(@NonNull Highlight highlight) {
+        public Builder setIHighlight(@NonNull IHighlight IHighlight) {
             this.targetLayoutId = 0;
             this.targetView = null;
-            this.highlight = highlight;
+            this.IHighlight = IHighlight;
+            this.animator = ValueAnimator.ofInt(0, IHighlight.getMax());
+            this.animator.setInterpolator(new DecelerateInterpolator(2F));
+            this.animator.setDuration(1000);
             return this;
         }
 
@@ -199,6 +215,11 @@ public class Guide implements IGuide {
         public Builder setDescription(@NonNull View descriptionView) {
             this.descriptionLayoutId = 0;
             this.descriptionView = descriptionView;
+            return this;
+        }
+
+        public Builder setAnimator(@NonNull ValueAnimator animator) {
+            this.animator = animator;
             return this;
         }
 

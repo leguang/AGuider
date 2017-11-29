@@ -15,8 +15,8 @@ import cn.itsite.aguider.AGuiderListener;
 import cn.itsite.aguider.Guide;
 import cn.itsite.aguider.Guider;
 import cn.itsite.aguider.position.Position;
-import cn.itsite.aguider.shape.OvalHighlight;
-import cn.itsite.aguider.shape.RoundRectHighlight;
+import cn.itsite.aguider.highlight.OvalHighlight;
+import cn.itsite.aguider.highlight.RoundRectHighlight;
 
 /**
  * @author leguang
@@ -44,23 +44,23 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final Guide guide0 = new Guide.Builder()
                         .setPoint(target0)
-                        .setHighlight(new OvalHighlight(target0.getWidth(), target0.getHeight(), 50))
-                        .setPosition(Position.bottomLeft())
-                        .setDescription(getDesView())
+                        .setIHighlight(new OvalHighlight(target0.getWidth(), target0.getHeight()))
+                        .setPosition(Position.right())
+                        .setDescription(getDesView("000000000"))
                         .build();
 
                 final Guide guide1 = new Guide.Builder()
                         .setPoint(target1)
-                        .setPosition(Position.bottomRight())
-                        .setHighlight(new OvalHighlight(target1.getWidth(), target1.getHeight(), 11))
-                        .setDescription(getDesView())
+                        .setPosition(Position.bottom())
+                        .setIHighlight(new OvalHighlight(target1.getWidth(), target1.getHeight()))
+                        .setDescription(getDesView("111111"))
                         .build();
 
                 final Guide guide2 = new Guide.Builder()
                         .setPoint(target2)
-                        .setPosition(Position.right())
-                        .setHighlight(new RoundRectHighlight(target2.getWidth(), target2.getHeight(), 100))
-                        .setDescription(getDesView())
+                        .setPosition(Position.top())
+                        .setIHighlight(new RoundRectHighlight(target2.getWidth(), target2.getHeight()))
+                        .setDescription(getDesView("2222222222"))
                         .build();
 
                 new Guider.Builder()
@@ -109,9 +109,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public View getDesView() {
+    public View getDesView(String s) {
         final TextView description = new TextView(this);
-        description.setText("123456789");
+        description.setText(s + "...........\n..............\n.................\n..");
         description.setTextColor(Color.parseColor("#000000"));
         description.setGravity(Gravity.CENTER);
         description.setTextColor(Color.parseColor("#ff0000"));
