@@ -1,5 +1,6 @@
 package cn.itsite.aguider.demo;
 
+import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,18 +44,24 @@ public class MainActivity extends AppCompatActivity {
         target0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                ValueAnimator animator = ValueAnimator.ofInt(0, target0.getHeight()+1000);
+                animator.setInterpolator(new DecelerateInterpolator(2F));
+                animator.setDuration(100000);
+
                 final Guide guide0 = new Guide.Builder()
                         .setPoint(target0)
                         .setHighlight(new OvalHighlight(target0.getWidth(), target0.getHeight()))
-                        .setDescription(getDesView("000000000"))
+                        .setView(getDesView("000000000"))
                         .setBackground(0x90FF0000)
+                        .setAnimator(animator)
                         .build();
 
                 final Guide guide1 = new Guide.Builder()
                         .setPoint(target1)
                         .setPosition(Position.bottom())
                         .setHighlight(new OvalHighlight(target1.getWidth(), target1.getHeight()))
-                        .setDescription(getDesView("111111"))
+                        .setView(getDesView("1111111"))
                         .setBackground(0x9000FF00)
                         .build();
 
@@ -61,13 +69,14 @@ public class MainActivity extends AppCompatActivity {
                         .setPoint(target2)
                         .setPosition(Position.topleft())
                         .setHighlight(new RectHighlight(target2.getWidth(), target2.getHeight()))
-                        .setDescription(getDesView("2222222222"))
+                        .setView(getDesView("2222222222"))
                         .setBackground(0x900000FF)
                         .build();
 
                 new Guider.Builder()
                         .setAnchor(MainActivity.this)
                         .addGuides(guide0, guide1, guide2)
+                        .setMode(Guider.MODE_TOGETHER)
                         .setOnGuidertStartListener(new AGuiderListener.OnGuidertStartListener() {
                             @Override
                             public void onStart() {

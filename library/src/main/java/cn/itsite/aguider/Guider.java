@@ -1,7 +1,6 @@
 package cn.itsite.aguider;
 
 import android.app.Activity;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -20,12 +19,13 @@ import java.util.List;
  */
 public class Guider {
     public static final String TAG = Guider.class.getSimpleName();
+    public static final int MODE_NEXT = 0;
+    public static final int MODE_TOGETHER = 1;
     private final Builder builder;
     private Object anchor;
     private AGuiderListener.OnGuidertStartListener onGuidertStartListener;
     private AGuiderListener.OnGuidertStopListener onGuidertStopListener;
     private List<Guide> guides;
-    private int backgroundColor;
     private ViewGroup root;
 
     public Guider(Builder builder) {
@@ -72,6 +72,7 @@ public class Guider {
         AGuiderListener.OnGuidertStartListener onGuidertStartListener;
         AGuiderListener.OnGuidertStopListener onGuidertStopListener;
         List<Guide> guides = new ArrayList<>();
+        int mode = MODE_NEXT;
 
         public Builder() {
         }
@@ -105,6 +106,11 @@ public class Guider {
 
         public Builder setOnGuidertStopListener(AGuiderListener.OnGuidertStopListener listener) {
             this.onGuidertStopListener = listener;
+            return this;
+        }
+
+        public Builder setMode(int mode) {
+            this.mode = mode;
             return this;
         }
 

@@ -6,18 +6,18 @@ package cn.itsite.aguider;
  * @E-mail langmanleguang@qq.com
  * @time 2016/11/24 0024 9:08
  */
-public interface AGuiderListener<T extends IGuide> {
+public interface AGuiderListener {
 
-    interface OnGuideListener<T extends IGuide> {
+    interface OnGuideListener {
         /**
          * Called when IGuide is started
          */
-        void onStart(T target);
+        void onStart(Guide guide);
 
         /**
          * Called when IGuide is started
          */
-        void onStop(T target);
+        void onStop(Guide guide);
     }
 
     interface OnGuidertStartListener {

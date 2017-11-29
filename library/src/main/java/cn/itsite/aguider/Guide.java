@@ -25,8 +25,8 @@ public class Guide implements IGuide {
     private IHighlight highlight;
     private View targetView;
     private int targetLayoutId;
-    private View descriptionView;
-    private int descriptionLayoutId;
+    private View view;
+    private int viewId;
     private AGuiderListener.OnGuideListener listener;
     private ValueAnimator animator;
     private int backgroundColor;
@@ -38,8 +38,8 @@ public class Guide implements IGuide {
         this.highlight = builder.highlight;
         this.targetView = builder.targetView;
         this.targetLayoutId = builder.targetLayoutId;
-        this.descriptionView = builder.descriptionView;
-        this.descriptionLayoutId = builder.descriptionLayoutId;
+        this.view = builder.view;
+        this.viewId = builder.viewId;
         this.listener = builder.listener;
         this.animator = builder.animator;
         this.backgroundColor = builder.backgroundColor;
@@ -97,20 +97,20 @@ public class Guide implements IGuide {
         this.targetLayoutId = targetLayoutId;
     }
 
-    public View getDescriptionView() {
-        return descriptionView;
+    public View getView() {
+        return view;
     }
 
-    public void setDescriptionView(View descriptionView) {
-        this.descriptionView = descriptionView;
+    public void setView(View view) {
+        this.view = view;
     }
 
-    public int getDescriptionLayoutId() {
-        return descriptionLayoutId;
+    public int getViewId() {
+        return viewId;
     }
 
-    public void setDescriptionLayoutId(int descriptionLayoutId) {
-        this.descriptionLayoutId = descriptionLayoutId;
+    public void setViewId(int viewId) {
+        this.viewId = viewId;
     }
 
     public void setListener(AGuiderListener.OnGuideListener listener) {
@@ -143,8 +143,8 @@ public class Guide implements IGuide {
         IHighlight highlight;
         int targetLayoutId;
         View targetView;
-        int descriptionLayoutId;
-        View descriptionView;
+        int viewId;
+        View view;
         AGuiderListener.OnGuideListener listener;
         ValueAnimator animator;
         int backgroundColor = 0xB0000000;
@@ -187,7 +187,7 @@ public class Guide implements IGuide {
             return setPoint(x, y);
         }
 
-        public Builder setOnGuideListener(@NonNull final AGuiderListener.OnGuideListener<Guide> listener) {
+        public Builder setOnGuideListener(@NonNull final AGuiderListener.OnGuideListener listener) {
             this.listener = listener;
             return this;
         }
@@ -198,7 +198,7 @@ public class Guide implements IGuide {
             this.highlight = highlight;
             this.animator = ValueAnimator.ofInt(0, highlight.getMax());
             this.animator.setInterpolator(new DecelerateInterpolator(2F));
-            this.animator.setDuration(1000);
+            this.animator.setDuration(10000);
             return this;
         }
 
@@ -219,15 +219,15 @@ public class Guide implements IGuide {
             return this;
         }
 
-        public Builder setDescription(@LayoutRes int descriptionLayoutId) {
-            this.descriptionView = null;
-            this.descriptionLayoutId = descriptionLayoutId;
+        public Builder setView(@LayoutRes int viewId) {
+            this.view = null;
+            this.viewId = viewId;
             return this;
         }
 
-        public Builder setDescription(@NonNull View descriptionView) {
-            this.descriptionLayoutId = 0;
-            this.descriptionView = descriptionView;
+        public Builder setView(@NonNull View descriptionView) {
+            this.viewId = 0;
+            this.view = descriptionView;
             return this;
         }
 
