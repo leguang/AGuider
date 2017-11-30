@@ -198,7 +198,7 @@ public class Guide implements IGuide {
             this.highlight = highlight;
             this.animator = ValueAnimator.ofInt(0, highlight.getMax());
             this.animator.setInterpolator(new DecelerateInterpolator(2F));
-            this.animator.setDuration(10000);
+            this.animator.setDuration(1500);
             return this;
         }
 

@@ -21,20 +21,21 @@ public class Guider {
     public static final String TAG = Guider.class.getSimpleName();
     public static final int MODE_NEXT = 0;
     public static final int MODE_TOGETHER = 1;
-    private final Builder builder;
+    private int mode = MODE_NEXT;
+    private Builder builder;
     private Object anchor;
-    private AGuiderListener.OnGuidertStartListener onGuidertStartListener;
-    private AGuiderListener.OnGuidertStopListener onGuidertStopListener;
+    private AGuiderListener.OnGuidertStartListener onStartListener;
+    private AGuiderListener.OnGuidertStopListener onStopListener;
     private List<Guide> guides;
     private ViewGroup root;
 
     public Guider(Builder builder) {
         this.builder = builder;
-//        this.anchor = builder.anchor;
-//        this.onGuidertStartListener = builder.onGuidertStartListener;
-//        this.onGuidertStopListener = builder.onGuidertStopListener;
-//        this.guides = builder.guides;
-//        this.backgroundColor = builder.backgroundColor;
+        this.anchor = builder.anchor;
+        this.onStartListener = builder.onStartListener;
+        this.onStopListener = builder.onStopListener;
+        this.guides = builder.guides;
+        this.mode = builder.mode;
     }
 
     private Guider show(Builder builder) {
@@ -69,8 +70,8 @@ public class Guider {
 
     public static class Builder {
         Object anchor;
-        AGuiderListener.OnGuidertStartListener onGuidertStartListener;
-        AGuiderListener.OnGuidertStopListener onGuidertStopListener;
+        AGuiderListener.OnGuidertStartListener onStartListener;
+        AGuiderListener.OnGuidertStopListener onStopListener;
         List<Guide> guides = new ArrayList<>();
         int mode = MODE_NEXT;
 
@@ -100,12 +101,12 @@ public class Guider {
         }
 
         public Builder setOnGuidertStartListener(AGuiderListener.OnGuidertStartListener listener) {
-            this.onGuidertStartListener = listener;
+            this.onStartListener = listener;
             return this;
         }
 
         public Builder setOnGuidertStopListener(AGuiderListener.OnGuidertStopListener listener) {
-            this.onGuidertStopListener = listener;
+            this.onStopListener = listener;
             return this;
         }
 
@@ -115,6 +116,8 @@ public class Guider {
         }
 
         public Guider build() {
+
+
             return new Guider(this);
         }
 

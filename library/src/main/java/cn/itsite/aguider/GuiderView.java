@@ -68,7 +68,6 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
 
     @Override
     public void onGlobalLayout() {
-
         KLog.e("onGlobalLayout");
 
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -79,16 +78,16 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
         });
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
-        int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
-        int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
-        int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
-        KLog.e("sizeWidth--" + sizeWidth + "sizeHeight--" + sizeHeight);
-
-    }
+//    @Override
+//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
+//        int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
+//        int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
+//        int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
+//        KLog.e("sizeWidth--" + sizeWidth + "sizeHeight--" + sizeHeight);
+//
+//    }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -169,13 +168,9 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (builder.mode == Guider.MODE_NEXT) {
-
                         removeView(currentGuide.getView());
                         ++index;
                         KLog.e("_DOWN++index---" + index);
-                        if (index < builder.guides.size()) {
-                            currentGuide = builder.guides.get(index);
-                        }
 
                         if (index == builder.guides.size()) {
                             removeAllViews();
@@ -189,8 +184,11 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
                 case MotionEvent.ACTION_UP:
                     KLog.e("_UP++index---" + index);
                     if (builder.mode == Guider.MODE_NEXT) {
-                        addView(currentGuide.getView());
-                        showGuide(currentGuide);
+                        if (index < builder.guides.size()) {
+                            currentGuide = builder.guides.get(index);
+                            addView(currentGuide.getView());
+                            showGuide(currentGuide);
+                        }
                     } else if (builder.mode == Guider.MODE_TOGETHER) {
                         removeAllViews();
                         if (getParent() instanceof ViewGroup) {
@@ -226,13 +224,19 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
         }
     }
 
+    /**
+     * 考虑这里是否可以作为启动Guider的标志，如果可以就把监听器掉这里。
+     */
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+
+//        KLog.e("getTargetView().getWidth()" + builder.guides.get(0).po.getWidth());
+//        KLog.e("getTargetView().getWidth()" + builder.guides.get(0).po.getHeight());
+
         KLog.e("onAttachedToWindow");
-        /**
-         * 考虑这里是否可以作为启动Guider的标志，如果可以就把监听器掉这里。
-         */
+        builder.onStartListener.onStart();
+
         if (builder.mode == Guider.MODE_NEXT) {
             showGuide(currentGuide);
         } else if (builder.mode == Guider.MODE_TOGETHER) {
@@ -242,18 +246,22 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
         }
     }
 
+    /**
+     * 考虑结束的回调因不应该出现在这里。
+     * 因为要看一下如果Activity返回桌面的时候会不会调用这里。如果不会，那就可以把这个当做从decorView中Remove的标志。
+     */
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-
+        builder.onStopListener.onStop();
         KLog.e("onDetachedFromWindow...");
-        /**
-         * 考虑结束的回调因不应该出现在这里。
-         * 因为要看一下如果Activity返回桌面的时候会不会调用这里。如果不会，那就可以把这个当做从decorView中Remove的标志。
-         */
-
     }
 
+
+    /**
+     * 考虑把addView这一行代码也添加到这个函数中。
+     * @param guide
+     */
     private void showGuide(final Guide guide) {
         guide.getAnimator().addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override

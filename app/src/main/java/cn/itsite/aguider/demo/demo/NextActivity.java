@@ -1,17 +1,17 @@
 package cn.itsite.aguider.demo.demo;
 
-import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.socks.library.KLog;
 
 import cn.itsite.aguider.AGuiderListener;
 import cn.itsite.aguider.Guide;
@@ -20,6 +20,7 @@ import cn.itsite.aguider.demo.R;
 import cn.itsite.aguider.highlight.OvalHighlight;
 import cn.itsite.aguider.highlight.RectHighlight;
 import cn.itsite.aguider.position.Position;
+
 /**
  * @author leguang
  * @version v0.0.0
@@ -28,95 +29,35 @@ import cn.itsite.aguider.position.Position;
  */
 public class NextActivity extends AppCompatActivity {
     private static final String TAG = NextActivity.class.getSimpleName();
+    private TextView textView;
+    private ImageView imageView;
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next);
-        final LinearLayout ll = (LinearLayout) findViewById(R.id.ll);
 
-        final TextView target0 = ((TextView) findViewById(R.id.tv0));
-        final TextView target1 = ((TextView) findViewById(R.id.tv1));
-        final TextView target2 = ((TextView) findViewById(R.id.tv2));
+        initView();
+        initData();
 
-
-        target0.setOnClickListener(new View.OnClickListener() {
+        textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                ValueAnimator animator = ValueAnimator.ofInt(0, target0.getHeight() + 1000);
-                animator.setInterpolator(new DecelerateInterpolator(2F));
-                animator.setDuration(100000);
-
-                final Guide guide0 = new Guide.Builder()
-                        .setPoint(target0)
-                        .setHighlight(new OvalHighlight(target0.getWidth(), target0.getHeight()))
-                        .setView(getDesView("000000000"))
-                        .setBackground(0x90FF0000)
-                        .setAnimator(animator)
-                        .build();
-
-                final Guide guide1 = new Guide.Builder()
-                        .setPoint(target1)
-                        .setPosition(Position.bottom())
-                        .setHighlight(new OvalHighlight(target1.getWidth(), target1.getHeight()))
-                        .setView(getDesView("1111111"))
-                        .setBackground(0x9000FF00)
-                        .build();
-
-                final Guide guide2 = new Guide.Builder()
-                        .setPoint(target2)
-                        .setPosition(Position.topleft())
-                        .setHighlight(new RectHighlight(target2.getWidth(), target2.getHeight()))
-                        .setView(getDesView("2222222222"))
-                        .setBackground(0x900000FF)
-                        .build();
-
-                new Guider.Builder()
-                        .setAnchor(NextActivity.this)
-                        .addGuides(guide0, guide1, guide2)
-                        .setMode(Guider.MODE_TOGETHER)
-                        .setOnGuidertStartListener(new AGuiderListener.OnGuidertStartListener() {
-                            @Override
-                            public void onStart() {
-                                Log.e(TAG, "onStart^^^^^^^^^^^");
-                            }
-                        })
-                        .setOnGuidertStopListener(new AGuiderListener.OnGuidertStopListener() {
-                            @Override
-                            public void onStop() {
-                                Log.e(TAG, "onStart^^^^^^^^^^^");
-                            }
-                        })
-                        .show();
             }
         });
 
-//        final GuiderView guiderView = new GuiderView(MainActivity.this);
-//
-//        target1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                KLog.e("1111111111");
-//                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//                layoutParams.leftMargin = 30;
-//                guiderView.setBackgroundColor(Color.parseColor("#00ff00"));
-//                guiderView.setLayoutParams(layoutParams);
-//
-//            }
-//        });
-//
-//        target2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                KLog.e("1111111111");
-//                ll.addView(guiderView);
-//
-//                guiderView.addView(getDesView());
-//
-//            }
-//        });
+    }
 
+    private void initView() {
+        textView = ((TextView) findViewById(R.id.textView));
+        imageView = ((ImageView) findViewById(R.id.imageView));
+        button = ((Button) findViewById(R.id.button));
+    }
+
+    private void initData() {
+//        simple();
     }
 
     public View getDesView(String s) {
@@ -132,5 +73,82 @@ public class NextActivity extends AppCompatActivity {
         description.setLayoutParams(layoutParams);
         description.setBackgroundColor(Color.parseColor("#77ff00ff"));
         return description;
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+//        Guide guide0 = new Guide.Builder()
+//                .setPoint(textView)
+//                .setHighlight(new OvalHighlight(textView.getWidth(), textView.getHeight()))
+//                .setView(getDesView("000000000"))
+//                .setBackground(0x90FF0000)
+//                .build();
+//
+//        Guide guide1 = new Guide.Builder()
+//                .setPoint(imageView)
+//                .setPosition(Position.bottom())
+//                .setHighlight(new OvalHighlight(imageView.getWidth(), imageView.getHeight()))
+//                .setView(getDesView("1111111"))
+//                .setBackground(0x9000FF00)
+//                .build();
+        simple();
+
+    }
+
+    public void simple() {
+
+        Guide guide0 = new Guide.Builder()
+                .setPoint(textView)
+                .setHighlight(new OvalHighlight(textView.getWidth(), textView.getHeight()))
+                .setView(getDesView("000000000"))
+                .setBackground(0x90FF0000)
+                .build();
+        Guide guide1 = new Guide.Builder()
+                .setPoint(imageView)
+                .setPosition(Position.bottom())
+                .setHighlight(new OvalHighlight(imageView.getWidth(), imageView.getHeight()))
+                .setView(getDesView("1111111"))
+                .setBackground(0x9000FF00)
+                .build();
+
+        Guide guide = new Guide.Builder()
+                .setPoint(button)
+                .setPosition(Position.topleft())
+                .setOnGuideListener(new AGuiderListener.OnGuideListener() {
+                    @Override
+                    public void onStart(Guide guide) {
+                        KLog.e(TAG, "Guide----onStart…………");
+
+                    }
+
+                    @Override
+                    public void onStop(Guide guide) {
+                        KLog.e(TAG, "Guide----onStop…………");
+
+                    }
+                })
+                .setHighlight(new RectHighlight(button.getWidth(), button.getHeight()))
+                .setView(getDesView("2222222222"))
+                .build();
+
+        new Guider.Builder()
+                .setAnchor(NextActivity.this)
+                .addGuides(guide0, guide1, guide)
+                .setMode(Guider.MODE_NEXT)//MODE_NEXT：一个接着一个显示。MODE_TOGETHER：一起显示。
+                .setOnGuidertStartListener(new AGuiderListener.OnGuidertStartListener() {
+                    @Override
+                    public void onStart() {
+                        KLog.e(TAG, "onStart…………");
+                    }
+                })
+                .setOnGuidertStopListener(new AGuiderListener.OnGuidertStopListener() {
+                    @Override
+                    public void onStop() {
+                        KLog.e(TAG, "onStop…………");
+                    }
+                })
+                .show();
     }
 }
