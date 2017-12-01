@@ -18,4 +18,18 @@
         android:text="together模式"
         android:textAllCaps="false" />
 
+    <Button
+        android:id="@+id/bt_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Activity中显示"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/bt_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fragment中显示"
+        android:textAllCaps="false" />
+
 </LinearLayout>
