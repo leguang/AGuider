@@ -1,27 +1,15 @@
 package cn.itsite.aguider.demo;
 
-import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import cn.itsite.aguider.AGuiderListener;
-import cn.itsite.aguider.Guide;
-import cn.itsite.aguider.Guider;
+import cn.itsite.aguider.demo.demo.ActivityActivity;
+import cn.itsite.aguider.demo.demo.FragmentActivity;
 import cn.itsite.aguider.demo.demo.NextActivity;
-import cn.itsite.aguider.highlight.OvalHighlight;
-import cn.itsite.aguider.highlight.RectHighlight;
-import cn.itsite.aguider.position.Position;
+import cn.itsite.aguider.demo.demo.TogetherActivity;
 
 /**
  * @author leguang
@@ -65,13 +53,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, NextActivity.class));
                 break;
             case R.id.bt_together:
-//                startActivity(new Intent(this, DialogFragmentActivity.class));
+                startActivity(new Intent(this, TogetherActivity.class));
                 break;
             case R.id.bt_activity:
-//                startActivity(new Intent(this, DialogFragmentActivity.class));
+                startActivity(new Intent(this, ActivityActivity.class));
                 break;
             case R.id.bt_fragment:
-//                startActivity(new Intent(this, DialogFragmentActivity.class));
+                startActivity(new Intent(this, FragmentActivity.class));
                 break;
             default:
         }
