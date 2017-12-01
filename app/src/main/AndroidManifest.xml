@@ -19,7 +19,9 @@
         <activity android:name=".demo.NextActivity" />
         <activity android:name=".demo.ActivityActivity" />
         <activity android:name=".demo.FragmentActivity" />
-        <activity android:name=".demo.TogetherActivity"></activity>
+        <activity android:name=".demo.TogetherActivity" />
+        <activity android:name=".demo.ListActivity" />
+        <activity android:name=".demo.AnywhereActivity"></activity>
     </application>
 
 </manifest>
