@@ -134,7 +134,7 @@ public class NextActivity extends AppCompatActivity {
                 .build();
 
         new Guider.Builder()
-                .setAnchor(NextActivity.this)
+                .setAnchor(this)
                 .addGuides(guide0, guide1, guide)
                 .setMode(Guider.MODE_NEXT)//MODE_NEXT：一个接着一个显示。MODE_TOGETHER：一起显示。
                 .setOnGuidertStartListener(new AGuiderListener.OnGuidertStartListener() {

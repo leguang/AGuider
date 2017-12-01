@@ -1,8 +1,8 @@
 package cn.itsite.aguider.demo.demo;
 
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +21,8 @@ import cn.itsite.aguider.highlight.OvalHighlight;
 import cn.itsite.aguider.highlight.RectHighlight;
 import cn.itsite.aguider.position.Position;
 
-/**
- * @author leguang
- * @version v0.0.0
- * @E-mail langmanleguang@qq.com
- * @time 2016/11/24 0024 9:08
- */
-public class ActivityActivity extends AppCompatActivity {
-    private static final String TAG = ActivityActivity.class.getSimpleName();
+public class TogetherActivity extends AppCompatActivity {
+    private static final String TAG = TogetherActivity.class.getSimpleName();
     private TextView textView;
     private ImageView imageView;
     private Button button;

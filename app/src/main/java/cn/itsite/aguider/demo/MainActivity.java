@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
     private Button btNext;
     private Button btTogether;
+    private Button btActivity;
+    private Button btFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +47,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         btNext = (Button) findViewById(R.id.bt_next);
         btTogether = (Button) findViewById(R.id.bt_together);
+        btActivity = (Button) findViewById(R.id.bt_activity);
+        btFragment = (Button) findViewById(R.id.bt_fragment);
     }
 
     private void initData() {
         btNext.setOnClickListener(this);
         btTogether.setOnClickListener(this);
+        btActivity.setOnClickListener(this);
+        btFragment.setOnClickListener(this);
     }
 
     @Override
@@ -59,6 +65,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, NextActivity.class));
                 break;
             case R.id.bt_together:
+//                startActivity(new Intent(this, DialogFragmentActivity.class));
+                break;
+            case R.id.bt_activity:
+//                startActivity(new Intent(this, DialogFragmentActivity.class));
+                break;
+            case R.id.bt_fragment:
 //                startActivity(new Intent(this, DialogFragmentActivity.class));
                 break;
             default:
