@@ -16,14 +16,4 @@ public class Left implements IPosition {
     public int top(int y, int highlightHeight, int height) {
         return y - height / 2;
     }
-
-//    @Override
-//    public int left(int x, int widthRadius, int width) {
-//        return x - widthRadius - width;
-//    }
-//
-//    @Override
-//    public int top(int y, int heightRadius, int height) {
-//        return y - height / 2;
-//    }
 }

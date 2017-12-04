@@ -17,6 +17,7 @@ import cn.itsite.aguider.AGuiderListener;
 import cn.itsite.aguider.Guide;
 import cn.itsite.aguider.Guider;
 import cn.itsite.aguider.demo.R;
+import cn.itsite.aguider.highlight.CircleHighlight;
 import cn.itsite.aguider.highlight.OvalHighlight;
 import cn.itsite.aguider.highlight.RectHighlight;
 import cn.itsite.aguider.position.Position;
@@ -56,9 +57,7 @@ public class NextActivity extends AppCompatActivity {
         button = ((Button) findViewById(R.id.button));
     }
 
-    private void initData() {
-//        simple();
-    }
+
 
     public View getDesView(String s) {
         final TextView description = new TextView(this);
@@ -75,25 +74,16 @@ public class NextActivity extends AppCompatActivity {
         return description;
     }
 
+    private void initData() {
+        simple();
+    }
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
+        KLog.e("GuiderView", "onWindowFocusChanged");
 
-//        Guide guide0 = new Guide.Builder()
-//                .setPoint(textView)
-//                .setHighlight(new OvalHighlight(textView.getWidth(), textView.getHeight()))
-//                .setView(getDesView("000000000"))
-//                .setBackground(0x90FF0000)
-//                .build();
-//
-//        Guide guide1 = new Guide.Builder()
-//                .setPoint(imageView)
-//                .setPosition(Position.bottom())
-//                .setHighlight(new OvalHighlight(imageView.getWidth(), imageView.getHeight()))
-//                .setView(getDesView("1111111"))
-//                .setBackground(0x9000FF00)
-//                .build();
-        simple();
+//        simple();
 
     }
 
@@ -101,14 +91,15 @@ public class NextActivity extends AppCompatActivity {
 
         Guide guide0 = new Guide.Builder()
                 .setPoint(textView)
-                .setHighlight(new OvalHighlight(textView.getWidth(), textView.getHeight()))
+                .setPosition(Position.left())
+                .setHighlight(new OvalHighlight(textView.getWidth(), textView.getHeight(),1))
                 .setView(getDesView("000000000"))
-                .setBackground(0x90FF0000)
+                .setBackground(0x30FF0000)
                 .build();
         Guide guide1 = new Guide.Builder()
                 .setPoint(imageView)
-                .setPosition(Position.bottom())
-                .setHighlight(new OvalHighlight(imageView.getWidth(), imageView.getHeight()))
+                .setPosition(Position.left())
+                .setHighlight(new CircleHighlight(imageView.getWidth(), imageView.getHeight()))
                 .setView(getDesView("1111111"))
                 .setBackground(0x9000FF00)
                 .build();
@@ -116,6 +107,8 @@ public class NextActivity extends AppCompatActivity {
         Guide guide = new Guide.Builder()
                 .setPoint(button)
                 .setPosition(Position.topleft())
+                .setHighlight(new RectHighlight(button.getWidth(), button.getHeight()))
+                .setView(getDesView("2222222222"))
                 .setOnGuideListener(new AGuiderListener.OnGuideListener() {
                     @Override
                     public void onStart(Guide guide) {
@@ -129,8 +122,6 @@ public class NextActivity extends AppCompatActivity {
 
                     }
                 })
-                .setHighlight(new RectHighlight(button.getWidth(), button.getHeight()))
-                .setView(getDesView("2222222222"))
                 .build();
 
         new Guider.Builder()
@@ -150,5 +141,12 @@ public class NextActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        KLog.e(TAG, "onActivityStart…………");
+
     }
 }

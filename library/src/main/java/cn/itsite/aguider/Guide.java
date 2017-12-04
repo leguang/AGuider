@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
+import com.socks.library.KLog;
+
 import cn.itsite.aguider.highlight.IHighlight;
 import cn.itsite.aguider.position.IPosition;
 import cn.itsite.aguider.position.Position;
@@ -21,6 +23,7 @@ import cn.itsite.aguider.position.Position;
 public class Guide implements IGuide {
     private int x;
     private int y;
+    private View pointView;
     private IPosition position;
     private IHighlight highlight;
     private View targetView;
@@ -34,6 +37,7 @@ public class Guide implements IGuide {
     public Guide(Builder builder) {
         this.x = builder.x;
         this.y = builder.y;
+        this.pointView = builder.pointView;
         this.position = builder.position;
         this.highlight = builder.highlight;
         this.targetView = builder.targetView;
@@ -63,6 +67,18 @@ public class Guide implements IGuide {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public View getPointView() {
+        return pointView;
+    }
+
+    public void setPointView(View pointView) {
+        this.pointView = pointView;
+        int[] location = new int[2];
+        pointView.getLocationInWindow(location);
+        this.x = location[0] + pointView.getWidth() / 2;
+        this.y = location[1] + pointView.getHeight() / 2;
     }
 
     public IPosition getPosition() {
@@ -139,6 +155,7 @@ public class Guide implements IGuide {
     public static class Builder {
         int x;
         int y;
+        View pointView;
         IPosition position = Position.center();
         IHighlight highlight;
         int targetLayoutId;
@@ -176,14 +193,17 @@ public class Guide implements IGuide {
          * Sets the initial position of highlight
          * Make sure the view already has a fixed position
          *
-         * @param view starting position where spotlight reveals
+         * @param pointView starting position where spotlight reveals
          * @return This Builder
          */
-        public Builder setPoint(@NonNull View view) {
+        public Builder setPoint(@NonNull View pointView) {
+            this.pointView = pointView;
             int[] location = new int[2];
-            view.getLocationInWindow(location);
-            int x = location[0] + view.getWidth() / 2;
-            int y = location[1] + view.getHeight() / 2;
+            pointView.getLocationInWindow(location);
+            int x = location[0] + pointView.getWidth() / 2;
+            int y = location[1] + pointView.getHeight() / 2;
+            KLog.e("x::" + x);
+            KLog.e("y::" + y);
             return setPoint(x, y);
         }
 

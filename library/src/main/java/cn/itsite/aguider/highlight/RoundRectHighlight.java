@@ -25,10 +25,17 @@ public class RoundRectHighlight implements IHighlight {
     }
 
     public RoundRectHighlight(int width, int height, int padding, int radius) {
-        this.width = width + padding * 2;
-        this.height = height + padding * 2;
+        this.width = width;
+        this.height = height;
         this.padding = padding;
         this.radius = radius;
+        init();
+    }
+
+    @Override
+    public void init() {
+        this.width = width + padding * 2;
+        this.height = height + padding * 2;
     }
 
     @Override
@@ -63,10 +70,12 @@ public class RoundRectHighlight implements IHighlight {
         canvas.drawRoundRect(rectF, radius, radius, paint);
     }
 
+    @Override
     public void setWidth(int width) {
         this.width = width;
     }
 
+    @Override
     public void setHeight(int height) {
         this.height = height;
     }

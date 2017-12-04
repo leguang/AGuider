@@ -69,25 +69,24 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     @Override
     public void onGlobalLayout() {
         KLog.e("onGlobalLayout");
+        KLog.e("getTargetView().getWidth()" + builder.guides.get(0).getPointView().getWidth());
+        KLog.e("getTargetView().getWidth()" + builder.guides.get(0).getPointView().getHeight());
 
-        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                KLog.e("getViewTreeObserver()-->onGlobalLayout");
-            }
-        });
     }
 
-//    @Override
-//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
-//        int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
-//        int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
-//        int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
-//        KLog.e("sizeWidth--" + sizeWidth + "sizeHeight--" + sizeHeight);
-//
-//    }
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        if (w == oldw && h == oldh) {
+            for (Guide guide : builder.guides) {
+                guide.setPointView(guide.getPointView());
+                guide.getHighlight().setWidth(guide.getPointView().getWidth());
+                guide.getHighlight().setHeight(guide.getPointView().getHeight());
+                guide.getHighlight().init();
+                guide.getAnimator().setIntValues(0, guide.getHighlight().getMax());
+            }
+        }
+    }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -132,16 +131,25 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
                 }
 
 
-                final int childLeft = position.left(x, highlight.getWidth(), width) + lp.leftMargin;
-                final int childTop = position.top(y, highlight.getHeight(), height) + lp.topMargin;
-                final int childRight = childLeft + width - lp.rightMargin;
-                final int childBottom = childTop + height - lp.bottomMargin;
+                KLog.e("x::" + x);
+                KLog.e("y::" + y);
+                KLog.e("highlight.getWidth::" + highlight.getWidth());
+                KLog.e("highlight.getHeight::" + highlight.getHeight());
+                KLog.e("width::" + width);
+                KLog.e("height::" + height);
 
-                KLog.e("childLeft:" + childLeft);
-                KLog.e("childTop:" + childTop);
-                KLog.e("childRight:" + childRight);
-                KLog.e("childBottom:" + childBottom);
-                child.layout(childLeft, childTop, childRight, childBottom);
+                if (position != null) {
+                    final int childLeft = position.left(x, highlight.getWidth(), width) + lp.leftMargin;
+                    final int childTop = position.top(y, highlight.getHeight(), height) + lp.topMargin;
+                    final int childRight = childLeft + width - lp.rightMargin;
+                    final int childBottom = childTop + height - lp.bottomMargin;
+
+                    KLog.e("childLeft:" + childLeft);
+                    KLog.e("childTop:" + childTop);
+                    KLog.e("childRight:" + childRight);
+                    KLog.e("childBottom:" + childBottom);
+                    child.layout(childLeft, childTop, childRight, childBottom);
+                }
             }
         }
     }
@@ -230,11 +238,11 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-
-//        KLog.e("getTargetView().getWidth()" + builder.guides.get(0).po.getWidth());
-//        KLog.e("getTargetView().getWidth()" + builder.guides.get(0).po.getHeight());
-
         KLog.e("onAttachedToWindow");
+
+        KLog.e("getTargetView().getWidth()" + builder.guides.get(0).getPointView().getWidth());
+        KLog.e("getTargetView().getWidth()" + builder.guides.get(0).getPointView().getHeight());
+
         builder.onStartListener.onStart();
 
         if (builder.mode == Guider.MODE_NEXT) {
@@ -260,6 +268,7 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
 
     /**
      * 考虑把addView这一行代码也添加到这个函数中。
+     *
      * @param guide
      */
     private void showGuide(final Guide guide) {

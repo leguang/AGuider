@@ -25,7 +25,14 @@ public class CircleHighlight implements IHighlight {
         this.width = width;
         this.height = height;
         this.padding = padding;
+        init();
+    }
+
+    @Override
+    public void init() {
         this.radius = ((int) Math.hypot((double) width, (double) height) / 2) + padding;
+        this.width = radius * 2;
+        this.height = radius * 2;
     }
 
     @Override
@@ -35,34 +42,39 @@ public class CircleHighlight implements IHighlight {
 
     @Override
     public void draw(Canvas canvas, Paint paint, int x, int y, int value) {
-        KLog.e("value--" + value);
-        KLog.e("radius--" + radius);
-        if (value <= radius) {
-            canvas.drawCircle(x, y, value, paint);
+        KLog.e("x::" + x);
+        KLog.e("y::" + y);
+        KLog.e("value::" + value);
+
+        if (value >= radius) {
+            value = radius;
         }
+        canvas.drawCircle(x, y, value, paint);
     }
 
     @Override
     public int getWidth() {
-        return radius;
+        return width;
     }
 
+    @Override
     public void setWidth(int width) {
         this.width = width;
     }
 
+    @Override
     public void setHeight(int height) {
         this.height = height;
     }
 
     @Override
     public int getHeight() {
-        return radius;
+        return height;
     }
 
     @Override
     public int getMax() {
-        return radius;
+        return Math.max(width, height);
     }
 
     public int getRadius() {

@@ -20,9 +20,16 @@ public class RectHighlight implements IHighlight {
     }
 
     public RectHighlight(int width, int height, int padding) {
+        this.width = width;
+        this.height = height;
+        this.padding = padding;
+        init();
+    }
+
+    @Override
+    public void init() {
         this.width = width + padding * 2;
         this.height = height + padding * 2;
-        this.padding = padding;
     }
 
     @Override
@@ -57,10 +64,12 @@ public class RectHighlight implements IHighlight {
         canvas.drawRect(rectF, paint);
     }
 
+    @Override
     public void setWidth(int width) {
         this.width = width;
     }
 
+    @Override
     public void setHeight(int height) {
         this.height = height;
     }

@@ -10,6 +10,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#30ff0000"
         android:text="Hello World!" />
 
     <ImageView
@@ -17,12 +18,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="100dp"
+        android:background="#30ff0000"
         android:src="@mipmap/ic_launcher_round" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#30ff0000"
         android:text="Hello World!"
         android:textAllCaps="false" />
 
