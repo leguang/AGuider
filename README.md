@@ -1,14 +1,13 @@
-# ADialog
+# AGuider
 
-[![Release](https://jitpack.io/v/leguang/ADialog.svg)](https://jitpack.io/#leguang/ADialog)
+[![Release](https://jitpack.io/v/leguang/AGuider.svg)](https://jitpack.io/#leguang/AGuider)
 
-ADialog是一个简单易用的构建Dialog和DialogFragment的工具，可以让开发者只需要传入xml布局文件即可方便而又灵活地创建属于自己Dialog或者DialogFragment。（欢迎Star一下）
+AGuider是一个简单易用的构建新手引导的工具，可以让开发者只需要传入xml布局文件即可方便而又灵活地创建属于自己引导界面。（欢迎Star一下）
 ## 能做什么？([下载 apk](https://github.com/leguang/ADialog/blob/master/app-debug.apk))
-- **只需要通过传入布局ID即可定制出自己的Dialog或者DialogFragment**
-- **弹框位置可配置，在顶部、在中间还是在底部由你决定**
-- **默认提供一些进入动画**
+- **只需要通过传入布局ID即可定制出自己的引导界面**
+- **有带遮罩+高亮和Popwindow两种**
+- **默认提供一些动画**
 - **简洁的API，简单的配置**
-- **任何布局数据的填充和的事件都可以通过ViewHolder传递出来**
 
 ## 如何使用它？
 
@@ -25,13 +24,13 @@ ADialog是一个简单易用的构建Dialog和DialogFragment的工具，可以�
 2. 然后在App目录下的dependencies添加:
 ```
 	dependencies {
-	     //一个扩展性很好的Dialog+DialogFragment工具。
-   		 compile 'com.github.leguang:ADialog:1.9'
+	     //新手引导工具，有带遮罩的和Popwindow两种。
+   		 compile 'com.github.leguang:AGuider:0.0.1'
 	}
 ```
 此时同步一下，即已完成引入。
 
-### Dialog的简单使用：
+### AGuider的简单使用：
 
 ```
    new BaseDialog(this)
