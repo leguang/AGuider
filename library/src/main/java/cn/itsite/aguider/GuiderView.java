@@ -68,22 +68,20 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
 
     @Override
     public void onGlobalLayout() {
-        KLog.e("onGlobalLayout");
-        KLog.e("getTargetView().getWidth()" + builder.guides.get(0).getPointView().getWidth());
-        KLog.e("getTargetView().getWidth()" + builder.guides.get(0).getPointView().getHeight());
 
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        if (w == oldw && h == oldh) {
+        if (w != oldw && h != oldh) {
             for (Guide guide : builder.guides) {
-                guide.setPointView(guide.getPointView());
-                guide.getHighlight().setWidth(guide.getPointView().getWidth());
-                guide.getHighlight().setHeight(guide.getPointView().getHeight());
-                guide.getHighlight().init();
-                guide.getAnimator().setIntValues(0, guide.getHighlight().getMax());
+                if (guide.getPointView() != null) {
+                    guide.setPointView(guide.getPointView());
+                    guide.getHighlight().setWidth(guide.getPointView().getWidth());
+                    guide.getHighlight().setHeight(guide.getPointView().getHeight());
+                    guide.getHighlight().init();
+                    guide.getAnimator().setIntValues(0, guide.getHighlight().getMax());
+                }
             }
         }
     }
@@ -91,20 +89,6 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        KLog.e("changed:" + changed + "  left:" + left + "  top：" + top + "  right：" + right + "  bottom：" + bottom);
-        KLog.e("getMeasuredWidth():" + getMeasuredWidth());
-        KLog.e("getMeasuredHeight():" + getMeasuredHeight());
-        KLog.e("getWidth():" + getWidth());
-        KLog.e("getHeight():" + getHeight());
-
-        if (getChildCount() > 0) {
-            KLog.e("getChildAt(0).getMeasuredWidth():" + getChildAt(0).getMeasuredWidth());
-            KLog.e("getChildAt(0).getMeasuredHeight():" + getChildAt(0).getMeasuredHeight());
-            KLog.e("getChildAt(0).getWidth():" + getChildAt(0).getWidth());
-            KLog.e("getChildAt(0).getHeight():" + getChildAt(0).getHeight());
-        }
-
-
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
@@ -130,24 +114,11 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
                     highlight = builder.guides.get(i).getHighlight();
                 }
 
-
-                KLog.e("x::" + x);
-                KLog.e("y::" + y);
-                KLog.e("highlight.getWidth::" + highlight.getWidth());
-                KLog.e("highlight.getHeight::" + highlight.getHeight());
-                KLog.e("width::" + width);
-                KLog.e("height::" + height);
-
                 if (position != null) {
                     final int childLeft = position.left(x, highlight.getWidth(), width) + lp.leftMargin;
                     final int childTop = position.top(y, highlight.getHeight(), height) + lp.topMargin;
                     final int childRight = childLeft + width - lp.rightMargin;
                     final int childBottom = childTop + height - lp.bottomMargin;
-
-                    KLog.e("childLeft:" + childLeft);
-                    KLog.e("childTop:" + childTop);
-                    KLog.e("childRight:" + childRight);
-                    KLog.e("childBottom:" + childBottom);
                     child.layout(childLeft, childTop, childRight, childBottom);
                 }
             }
@@ -156,7 +127,6 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
 
     @Override
     protected void onDraw(Canvas canvas) {
-        KLog.e("onDraw………………………………………………………………");
         if (builder.mode == Guider.MODE_NEXT) {
             canvas.drawColor(currentGuide.getBackgroundColor());
             currentGuide.getHighlight().draw(canvas, mPaint, currentGuide.getX(), currentGuide.getY(), (int) currentGuide.getAnimator().getAnimatedValue());
@@ -170,27 +140,21 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        KLog.e("onTouchEvent-----index::" + index);
-
         if (builder.guides != null && !builder.guides.isEmpty()) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (builder.mode == Guider.MODE_NEXT) {
                         removeView(currentGuide.getView());
                         ++index;
-                        KLog.e("_DOWN++index---" + index);
-
                         if (index == builder.guides.size()) {
                             removeAllViews();
                             if (getParent() instanceof ViewGroup) {
-                                KLog.e("移除这个GuiderView。。。");
                                 ((ViewGroup) getParent()).removeView(this);
                             }
                         }
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                    KLog.e("_UP++index---" + index);
                     if (builder.mode == Guider.MODE_NEXT) {
                         if (index < builder.guides.size()) {
                             currentGuide = builder.guides.get(index);
@@ -200,13 +164,11 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
                     } else if (builder.mode == Guider.MODE_TOGETHER) {
                         removeAllViews();
                         if (getParent() instanceof ViewGroup) {
-                            KLog.e("移除这个GuiderView。。。");
                             ((ViewGroup) getParent()).removeView(this);
                         }
                     }
                     break;
                 default:
-                    KLog.e("ACTION^^^^其他");
             }
             return true;
         }
@@ -214,37 +176,24 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     }
 
     public void initData(Guider.Builder builder) {
-        KLog.e("initData..");
-
         this.builder = builder;
 
         if (builder.mode == Guider.MODE_NEXT) {
             if (builder.guides != null && !builder.guides.isEmpty()) {
                 currentGuide = builder.guides.get(index);
                 addView(currentGuide.getView());
-                KLog.e("initData---添加了一个xml描述。。。");
             }
         } else if (builder.mode == Guider.MODE_TOGETHER) {
             for (Guide guide : builder.guides) {
                 addView(guide.getView());
-                KLog.e("initData");
             }
         }
     }
 
-    /**
-     * 考虑这里是否可以作为启动Guider的标志，如果可以就把监听器掉这里。
-     */
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        KLog.e("onAttachedToWindow");
-
-        KLog.e("getTargetView().getWidth()" + builder.guides.get(0).getPointView().getWidth());
-        KLog.e("getTargetView().getWidth()" + builder.guides.get(0).getPointView().getHeight());
-
         builder.onStartListener.onStart();
-
         if (builder.mode == Guider.MODE_NEXT) {
             showGuide(currentGuide);
         } else if (builder.mode == Guider.MODE_TOGETHER) {
@@ -254,23 +203,12 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
         }
     }
 
-    /**
-     * 考虑结束的回调因不应该出现在这里。
-     * 因为要看一下如果Activity返回桌面的时候会不会调用这里。如果不会，那就可以把这个当做从decorView中Remove的标志。
-     */
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         builder.onStopListener.onStop();
-        KLog.e("onDetachedFromWindow...");
     }
 
-
-    /**
-     * 考虑把addView这一行代码也添加到这个函数中。
-     *
-     * @param guide
-     */
     private void showGuide(final Guide guide) {
         guide.getAnimator().addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override

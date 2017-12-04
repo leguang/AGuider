@@ -90,9 +90,9 @@ public class NextActivity extends AppCompatActivity {
     public void simple() {
 
         Guide guide0 = new Guide.Builder()
-                .setPoint(textView)
+                .setPoint(800,600)
                 .setPosition(Position.left())
-                .setHighlight(new OvalHighlight(textView.getWidth(), textView.getHeight(),1))
+                .setHighlight(new OvalHighlight(300, 150,1))
                 .setView(getDesView("000000000"))
                 .setBackground(0x30FF0000)
                 .build();

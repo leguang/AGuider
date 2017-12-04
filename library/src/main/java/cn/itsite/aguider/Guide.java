@@ -74,11 +74,13 @@ public class Guide implements IGuide {
     }
 
     public void setPointView(View pointView) {
-        this.pointView = pointView;
-        int[] location = new int[2];
-        pointView.getLocationInWindow(location);
-        this.x = location[0] + pointView.getWidth() / 2;
-        this.y = location[1] + pointView.getHeight() / 2;
+        if (pointView != null) {
+            this.pointView = pointView;
+            int[] location = new int[2];
+            pointView.getLocationInWindow(location);
+            this.x = location[0] + pointView.getWidth() / 2;
+            this.y = location[1] + pointView.getHeight() / 2;
+        }
     }
 
     public IPosition getPosition() {
@@ -173,7 +175,7 @@ public class Guide implements IGuide {
          * @param x starting position of x where spotlight reveals
          * @return This Builder
          */
-        Builder setPoint(int x, int y) {
+        public Builder setPoint(int x, int y) {
             this.x = x;
             this.y = y;
             return this;
@@ -202,8 +204,6 @@ public class Guide implements IGuide {
             pointView.getLocationInWindow(location);
             int x = location[0] + pointView.getWidth() / 2;
             int y = location[1] + pointView.getHeight() / 2;
-            KLog.e("x::" + x);
-            KLog.e("y::" + y);
             return setPoint(x, y);
         }
 
