@@ -3,7 +3,7 @@
 [![Release](https://jitpack.io/v/leguang/AGuider.svg)](https://jitpack.io/#leguang/AGuider)
 
 AGuider是一个简单易用的构建新手引导的工具，可以让开发者只需要传入xml布局文件即可方便而又灵活地创建属于自己引导界面。（欢迎Star一下）
-## 能做什么？([下载 apk](https://github.com/leguang/ADialog/blob/master/app-debug.apk))
+## 能做什么？([下载 apk](https://github.com/leguang/AGuider/blob/master/app/app-release.apk))
 - **只需要通过传入布局ID即可定制出自己的引导界面**
 - **有带遮罩+高亮和Popwindow两种**
 - **默认提供一些动画**
