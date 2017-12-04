@@ -42,10 +42,6 @@ public class CircleHighlight implements IHighlight {
 
     @Override
     public void draw(Canvas canvas, Paint paint, int x, int y, int value) {
-        KLog.e("x::" + x);
-        KLog.e("y::" + y);
-        KLog.e("value::" + value);
-
         if (value >= radius) {
             value = radius;
         }

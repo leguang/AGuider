@@ -18,10 +18,12 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
-import com.socks.library.KLog;
+import java.util.List;
 
 import cn.itsite.aguider.highlight.IHighlight;
 import cn.itsite.aguider.position.IPosition;
+
+import static cn.itsite.aguider.Guider.MODE_NEXT;
 
 /**
  * @author leguang
@@ -30,11 +32,14 @@ import cn.itsite.aguider.position.IPosition;
  * @time 2016/11/24 0024 9:08
  */
 public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobalLayoutListener {
-    private static final String TAG = GuiderView.class.getSimpleName();
+    public static final String TAG = GuiderView.class.getSimpleName();
     private Paint mPaint;
-    private Guider.Builder builder;
     private Guide currentGuide;
     private int index = 0;
+    private AGuiderListener.OnGuidertStartListener onStartListener;
+    private AGuiderListener.OnGuidertStopListener onStopListener;
+    private List<Guide> guides;
+    private int mode = MODE_NEXT;
 
     public GuiderView(@NonNull Context context) {
         this(context, null);
@@ -74,11 +79,12 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         if (w != oldw && h != oldh) {
-            for (Guide guide : builder.guides) {
-                if (guide.getPointView() != null) {
-                    guide.setPointView(guide.getPointView());
-                    guide.getHighlight().setWidth(guide.getPointView().getWidth());
-                    guide.getHighlight().setHeight(guide.getPointView().getHeight());
+            for (Guide guide : guides) {
+                View pointView = guide.getPointView();
+                if (pointView != null) {
+                    guide.setPointView(pointView);
+                    guide.getHighlight().setWidth(pointView.getWidth());
+                    guide.getHighlight().setHeight(pointView.getHeight());
                     guide.getHighlight().init();
                     guide.getAnimator().setIntValues(0, guide.getHighlight().getMax());
                 }
@@ -102,21 +108,21 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
                 int y = 0;
                 IHighlight highlight = null;
 
-                if (builder.mode == Guider.MODE_NEXT) {
+                if (mode == MODE_NEXT) {
                     position = currentGuide.getPosition();
                     x = currentGuide.getX();
                     y = currentGuide.getY();
                     highlight = currentGuide.getHighlight();
-                } else if (builder.mode == Guider.MODE_TOGETHER) {
-                    position = builder.guides.get(i).getPosition();
-                    x = builder.guides.get(i).getX();
-                    y = builder.guides.get(i).getY();
-                    highlight = builder.guides.get(i).getHighlight();
+                } else if (mode == Guider.MODE_TOGETHER) {
+                    position = guides.get(i).getPosition();
+                    x = guides.get(i).getX();
+                    y = guides.get(i).getY();
+                    highlight = guides.get(i).getHighlight();
                 }
 
                 if (position != null) {
-                    final int childLeft = position.left(x, highlight.getWidth(), width) + lp.leftMargin;
-                    final int childTop = position.top(y, highlight.getHeight(), height) + lp.topMargin;
+                    final int childLeft = position.left(x, highlight == null ? 0 : highlight.getWidth(), width) + lp.leftMargin;
+                    final int childTop = position.top(y, highlight == null ? 0 : highlight.getHeight(), height) + lp.topMargin;
                     final int childRight = childLeft + width - lp.rightMargin;
                     final int childBottom = childTop + height - lp.bottomMargin;
                     child.layout(childLeft, childTop, childRight, childBottom);
@@ -127,26 +133,34 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (builder.mode == Guider.MODE_NEXT) {
+        if (mode == MODE_NEXT) {
             canvas.drawColor(currentGuide.getBackgroundColor());
-            currentGuide.getHighlight().draw(canvas, mPaint, currentGuide.getX(), currentGuide.getY(), (int) currentGuide.getAnimator().getAnimatedValue());
-        } else if (builder.mode == Guider.MODE_TOGETHER) {
-            canvas.drawColor(builder.guides.get(builder.guides.size() - 1).getBackgroundColor());
-            for (Guide guide : builder.guides) {
-                guide.getHighlight().draw(canvas, mPaint, guide.getX(), guide.getY(), (int) guide.getAnimator().getAnimatedValue());
+            IHighlight highlight = currentGuide.getHighlight();
+            if (highlight != null) {
+                highlight.draw(canvas, mPaint, currentGuide.getX(), currentGuide.getY(),
+                        currentGuide.getAnimator() == null ? 0 : (int) currentGuide.getAnimator().getAnimatedValue());
+            }
+        } else if (mode == Guider.MODE_TOGETHER) {
+            canvas.drawColor(guides.get(guides.size() - 1).getBackgroundColor());
+            for (Guide guide : guides) {
+                IHighlight highlight = guide.getHighlight();
+                if (highlight != null) {
+                    highlight.draw(canvas, mPaint, guide.getX(), guide.getY(),
+                            guide.getAnimator() == null ? 0 : (int) guide.getAnimator().getAnimatedValue());
+                }
             }
         }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (builder.guides != null && !builder.guides.isEmpty()) {
+        if (guides != null && !guides.isEmpty()) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    if (builder.mode == Guider.MODE_NEXT) {
+                    if (mode == MODE_NEXT) {
                         removeView(currentGuide.getView());
                         ++index;
-                        if (index == builder.guides.size()) {
+                        if (index == guides.size()) {
                             removeAllViews();
                             if (getParent() instanceof ViewGroup) {
                                 ((ViewGroup) getParent()).removeView(this);
@@ -155,13 +169,12 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                    if (builder.mode == Guider.MODE_NEXT) {
-                        if (index < builder.guides.size()) {
-                            currentGuide = builder.guides.get(index);
-                            addView(currentGuide.getView());
+                    if (mode == MODE_NEXT) {
+                        if (index < guides.size()) {
+                            currentGuide = guides.get(index);
                             showGuide(currentGuide);
                         }
-                    } else if (builder.mode == Guider.MODE_TOGETHER) {
+                    } else if (mode == Guider.MODE_TOGETHER) {
                         removeAllViews();
                         if (getParent() instanceof ViewGroup) {
                             ((ViewGroup) getParent()).removeView(this);
@@ -175,29 +188,18 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
         return super.onTouchEvent(event);
     }
 
-    public void initData(Guider.Builder builder) {
-        this.builder = builder;
-
-        if (builder.mode == Guider.MODE_NEXT) {
-            if (builder.guides != null && !builder.guides.isEmpty()) {
-                currentGuide = builder.guides.get(index);
-                addView(currentGuide.getView());
-            }
-        } else if (builder.mode == Guider.MODE_TOGETHER) {
-            for (Guide guide : builder.guides) {
-                addView(guide.getView());
-            }
-        }
-    }
-
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        builder.onStartListener.onStart();
-        if (builder.mode == Guider.MODE_NEXT) {
-            showGuide(currentGuide);
-        } else if (builder.mode == Guider.MODE_TOGETHER) {
-            for (Guide guide : builder.guides) {
+        onStartListener.onStart();
+
+        if (mode == MODE_NEXT) {
+            if (guides != null && !guides.isEmpty()) {
+                currentGuide = guides.get(index);
+                showGuide(currentGuide);
+            }
+        } else if (mode == Guider.MODE_TOGETHER) {
+            for (Guide guide : guides) {
                 showGuide(guide);
             }
         }
@@ -206,10 +208,17 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        builder.onStopListener.onStop();
+        onStopListener.onStop();
     }
 
     private void showGuide(final Guide guide) {
+        if (guide.getView() != null) {
+            addView(guide.getView());
+        }
+        if (guide.getAnimator() == null) {
+            return;
+        }
+
         guide.getAnimator().addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -243,5 +252,53 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
             }
         });
         guide.getAnimator().start();
+    }
+
+    public Guide getCurrentGuide() {
+        return currentGuide;
+    }
+
+    public void setCurrentGuide(Guide currentGuide) {
+        this.currentGuide = currentGuide;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public AGuiderListener.OnGuidertStartListener getOnGuidertStartListener() {
+        return onStartListener;
+    }
+
+    public void setOnGuidertStartListener(AGuiderListener.OnGuidertStartListener onStartListener) {
+        this.onStartListener = onStartListener;
+    }
+
+    public AGuiderListener.OnGuidertStopListener getOnGuidertStopListener() {
+        return onStopListener;
+    }
+
+    public void setOnGuidertStopListener(AGuiderListener.OnGuidertStopListener onStopListener) {
+        this.onStopListener = onStopListener;
+    }
+
+    public List<Guide> getGuides() {
+        return guides;
+    }
+
+    public void setGuides(List<Guide> guides) {
+        this.guides = guides;
+    }
+
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
     }
 }

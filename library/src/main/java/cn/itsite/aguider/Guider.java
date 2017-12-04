@@ -22,7 +22,6 @@ public class Guider {
     public static final int MODE_NEXT = 0;
     public static final int MODE_TOGETHER = 1;
     private int mode = MODE_NEXT;
-    private Builder builder;
     private Object anchor;
     private AGuiderListener.OnGuidertStartListener onStartListener;
     private AGuiderListener.OnGuidertStopListener onStopListener;
@@ -30,7 +29,6 @@ public class Guider {
     private ViewGroup root;
 
     public Guider(Builder builder) {
-        this.builder = builder;
         this.anchor = builder.anchor;
         this.onStartListener = builder.onStartListener;
         this.onStopListener = builder.onStopListener;
@@ -38,16 +36,16 @@ public class Guider {
         this.mode = builder.mode;
     }
 
-    private Guider show(Builder builder) {
+    public Guider show() {
         Activity activity;
-        if (builder.anchor != null) {
-            if (builder.anchor instanceof Activity) {
-                activity = (Activity) builder.anchor;
-            } else if (builder.anchor instanceof Fragment) {
-                Fragment fragment = (Fragment) builder.anchor;
+        if (anchor != null) {
+            if (anchor instanceof Activity) {
+                activity = (Activity) anchor;
+            } else if (anchor instanceof Fragment) {
+                Fragment fragment = (Fragment) anchor;
                 activity = fragment.getActivity();
-            } else if (builder.anchor instanceof View) {
-                View view = (View) builder.anchor;
+            } else if (anchor instanceof View) {
+                View view = (View) anchor;
                 if (view.getContext() instanceof Activity) {
                     activity = (Activity) view.getContext();
                 } else {
@@ -57,8 +55,13 @@ public class Guider {
                 throw new IllegalArgumentException("the anchor's type must be Fragment or Activity or a view ");
             }
             root = (ViewGroup) activity.getWindow().getDecorView();
+            //创建并初始化引导者View。
             GuiderView guiderView = new GuiderView(activity);
-            guiderView.initData(builder);
+            guiderView.setGuides(guides);
+            guiderView.setOnGuidertStartListener(onStartListener);
+            guiderView.setOnGuidertStopListener(onStopListener);
+            guiderView.setMode(mode);
+
             guiderView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
 
@@ -116,14 +119,12 @@ public class Guider {
         }
 
         public Guider build() {
-
-
             return new Guider(this);
         }
 
         public Guider show() {
             Guider guider = build();
-            guider.show(guider.builder);
+            guider.show();
             return guider;
         }
     }

@@ -58,7 +58,6 @@ public class NextActivity extends AppCompatActivity {
     }
 
 
-
     public View getDesView(String s) {
         final TextView description = new TextView(this);
         description.setText(s + "...........\n..............\n.................\n..");
@@ -81,7 +80,6 @@ public class NextActivity extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        KLog.e("GuiderView", "onWindowFocusChanged");
 
 //        simple();
 
@@ -90,35 +88,61 @@ public class NextActivity extends AppCompatActivity {
     public void simple() {
 
         Guide guide0 = new Guide.Builder()
-                .setPoint(800,600)
+                .setPoint(800, 600)
                 .setPosition(Position.left())
-                .setHighlight(new OvalHighlight(300, 150,1))
+                .setHighlight(new OvalHighlight(300, 150,100))
                 .setView(getDesView("000000000"))
-                .setBackground(0x30FF0000)
-                .build();
-        Guide guide1 = new Guide.Builder()
-                .setPoint(imageView)
-                .setPosition(Position.left())
-                .setHighlight(new CircleHighlight(imageView.getWidth(), imageView.getHeight()))
-                .setView(getDesView("1111111"))
-                .setBackground(0x9000FF00)
-                .build();
-
-        Guide guide = new Guide.Builder()
-                .setPoint(button)
-                .setPosition(Position.topleft())
-                .setHighlight(new RectHighlight(button.getWidth(), button.getHeight()))
-                .setView(getDesView("2222222222"))
                 .setOnGuideListener(new AGuiderListener.OnGuideListener() {
                     @Override
                     public void onStart(Guide guide) {
-                        KLog.e(TAG, "Guide----onStart…………");
+                        KLog.e(TAG, "Guide--000--onStart…………");
 
                     }
 
                     @Override
                     public void onStop(Guide guide) {
-                        KLog.e(TAG, "Guide----onStop…………");
+                        KLog.e(TAG, "Guide--000--onStop…………");
+
+                    }
+                })
+                .setBackground(0x30FF0000)
+                .build();
+        Guide guide1 = new Guide.Builder()
+                .setPoint(imageView)
+                .setPosition(Position.right())
+                .setHighlight(new CircleHighlight(imageView.getWidth(), imageView.getHeight()))
+                .setView(getDesView("1111111"))
+                .setOnGuideListener(new AGuiderListener.OnGuideListener() {
+                    @Override
+                    public void onStart(Guide guide) {
+                        KLog.e(TAG, "Guide--111--onStart…………");
+
+                    }
+
+                    @Override
+                    public void onStop(Guide guide) {
+                        KLog.e(TAG, "Guide--111--onStop…………");
+
+                    }
+                })
+                .setBackground(0x5000FF00)
+                .build();
+
+        Guide guide = new Guide.Builder()
+                .setPoint(button)
+                .setPosition(Position.bottom())
+                .setHighlight(new RectHighlight(button.getWidth(), button.getHeight()))
+                .setView(getDesView("2222222222"))
+                .setOnGuideListener(new AGuiderListener.OnGuideListener() {
+                    @Override
+                    public void onStart(Guide guide) {
+                        KLog.e(TAG, "Guide--222--onStart…………");
+
+                    }
+
+                    @Override
+                    public void onStop(Guide guide) {
+                        KLog.e(TAG, "Guide--222--onStop…………");
 
                     }
                 })
@@ -127,7 +151,7 @@ public class NextActivity extends AppCompatActivity {
         new Guider.Builder()
                 .setAnchor(this)
                 .addGuides(guide0, guide1, guide)
-                .setMode(Guider.MODE_NEXT)//MODE_NEXT：一个接着一个显示。MODE_TOGETHER：一起显示。
+                .setMode(Guider.MODE_TOGETHER)//MODE_NEXT：一个接着一个显示。MODE_TOGETHER：一起显示。
                 .setOnGuidertStartListener(new AGuiderListener.OnGuidertStartListener() {
                     @Override
                     public void onStart() {
@@ -141,12 +165,5 @@ public class NextActivity extends AppCompatActivity {
                     }
                 })
                 .show();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        KLog.e(TAG, "onActivityStart…………");
-
     }
 }
