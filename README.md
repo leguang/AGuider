@@ -99,11 +99,6 @@ Demo中有更多使用实例。
 
 >**持续更新!，欢迎Issues+Star项目**
 
-## 感谢
-[Alex-Cin/Dialog](https://github.com/Alex-Cin/Dialog)
-
-[CymChad/BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper)
-
 ## License
 
 ```
