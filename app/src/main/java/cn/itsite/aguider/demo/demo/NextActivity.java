@@ -105,13 +105,11 @@ public class NextActivity extends AppCompatActivity {
 
                     }
                 })
-//                .setBackground(0x30FF0000)
                 .build();
         Guide guide1 = new Guide.Builder()
                 .setPoint(imageView)
-                .setPosition(Position.bottomLeft())
+                .setPosition(Position.bottomRight())
                 .setHighlight(new CircleHighlight(imageView.getWidth(), imageView.getHeight()))
-                .setView(getDesView("1111111"))
                 .setView(R.layout.guide_0)
                 .setOnConvertListener(new AGuiderListener.OnConvertListener() {
                     @Override
@@ -120,7 +118,7 @@ public class NextActivity extends AppCompatActivity {
                         ImageView imageView = holder.getView(R.id.iv_arrow);
                         imageView.setImageResource(R.drawable.arrow_topleft);
                         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) imageView.getLayoutParams();
-                        layoutParams.gravity = Gravity.RIGHT;
+                        layoutParams.gravity = Gravity.LEFT;
                         imageView.setLayoutParams(layoutParams);
                     }
                 })
@@ -142,14 +140,15 @@ public class NextActivity extends AppCompatActivity {
 
         Guide guide2 = new Guide.Builder()
                 .setPoint(button)
-                .setPosition(Position.bottom())
+                .setPosition(Position.top())
                 .setHighlight(new RectHighlight(button.getWidth(), button.getHeight()))
-                .setView(getDesView("2222222222"))
-                .setView(R.layout.guide_0)
+                .setView(R.layout.guide_1)
                 .setOnConvertListener(new AGuiderListener.OnConvertListener() {
                     @Override
                     public void convert(BaseViewHolder holder, GuiderView guiderView) {
-                        holder.setText(R.id.tv_des, "哟，大爷，你来啦……");
+                        holder.setText(R.id.tv_des, "对对对，你说的都对……");
+                        ImageView imageView = holder.getView(R.id.iv_arrow);
+                        imageView.setImageResource(R.drawable.arrow_bottom);
                     }
                 })
                 .setOnGuideListener(new AGuiderListener.OnGuideListener() {

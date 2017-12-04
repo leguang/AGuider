@@ -6,25 +6,24 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/iv_arrow"
+        android:id="@+id/iv_iknow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:src="@drawable/arrow_topright" />
+        android:src="@drawable/iknow" />
 
     <TextView
         android:id="@+id/tv_des"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="没错，少年，就是这里……"
+        android:text="没错，骚年，就是这里……"
         android:textColor="@color/colorAccent"
         android:textSize="18dp"
         android:textStyle="italic" />
 
     <ImageView
-        android:id="@+id/iv_iknow"
+        android:id="@+id/iv_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/iknow" />
+        android:src="@drawable/arrow_topright" />
 
 </LinearLayout>
