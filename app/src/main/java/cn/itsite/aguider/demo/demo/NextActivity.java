@@ -74,14 +74,14 @@ public class NextActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        simple();
+//        simple();
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-//        simple();
+        simple();
 
     }
 
@@ -151,7 +151,7 @@ public class NextActivity extends AppCompatActivity {
         new Guider.Builder()
                 .setAnchor(this)
                 .addGuides(guide0, guide1, guide)
-                .setMode(Guider.MODE_TOGETHER)//MODE_NEXT：一个接着一个显示。MODE_TOGETHER：一起显示。
+                .setMode(Guider.MODE_NEXT)//MODE_NEXT：一个接着一个显示。MODE_TOGETHER：一起显示。
                 .setOnGuidertStartListener(new AGuiderListener.OnGuidertStartListener() {
                     @Override
                     public void onStart() {
