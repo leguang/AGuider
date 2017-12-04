@@ -17,6 +17,9 @@ public class CircleHighlight implements IHighlight {
     public int padding;
     public int radius;
 
+    public CircleHighlight() {
+    }
+
     public CircleHighlight(int width, int height) {
         this(width, height, 0);
     }

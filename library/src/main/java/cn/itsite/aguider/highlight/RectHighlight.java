@@ -15,6 +15,9 @@ public class RectHighlight implements IHighlight {
     public int height;
     public int padding;
 
+    public RectHighlight() {
+    }
+
     public RectHighlight(int width, int height) {
         this(width, height, 0);
     }

@@ -191,7 +191,9 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        onStartListener.onStart();
+        if (onStartListener != null) {
+            onStartListener.onStart();
+        }
 
         if (mode == MODE_NEXT) {
             if (guides != null && !guides.isEmpty()) {
@@ -208,12 +210,15 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        onStopListener.onStop();
+        if (onStopListener != null) {
+            onStopListener.onStop();
+        }
     }
 
     private void showGuide(final Guide guide) {
         if (guide.getView() != null) {
-            addView(guide.getView());
+            addView(guide.getView(), new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
         }
         if (guide.getAnimator() == null) {
             return;
@@ -229,15 +234,15 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
         guide.getAnimator().addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                if (guide.getListener() != null) {
-                    guide.getListener().onStart(guide);
+                if (guide.getOnGuideListener() != null) {
+                    guide.getOnGuideListener().onStart(guide);
                 }
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (guide.getListener() != null) {
-                    guide.getListener().onStop(guide);
+                if (guide.getOnGuideListener() != null) {
+                    guide.getOnGuideListener().onStop(guide);
                 }
             }
 
@@ -291,6 +296,12 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     }
 
     public void setGuides(List<Guide> guides) {
+        for (Guide guide : guides) {
+            if (guide.getViewId() != 0) {
+                guide.setView(inflate(getContext(), guide.getViewId(), null));
+                guide.getOnConvertListener().convert(new BaseViewHolder(guide.getView()), this);
+            }
+        }
         this.guides = guides;
     }
 

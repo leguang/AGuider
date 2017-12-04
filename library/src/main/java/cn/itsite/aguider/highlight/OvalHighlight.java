@@ -15,6 +15,9 @@ public class OvalHighlight implements IHighlight {
     public int height;
     public int padding;
 
+    public OvalHighlight() {
+    }
+
     public OvalHighlight(int width, int height) {
         this(width, height, 0);
     }

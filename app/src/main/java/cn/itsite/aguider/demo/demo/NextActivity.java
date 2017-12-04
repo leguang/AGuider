@@ -9,16 +9,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.socks.library.KLog;
 
 import cn.itsite.aguider.AGuiderListener;
+import cn.itsite.aguider.BaseViewHolder;
 import cn.itsite.aguider.Guide;
 import cn.itsite.aguider.Guider;
+import cn.itsite.aguider.GuiderView;
 import cn.itsite.aguider.demo.R;
 import cn.itsite.aguider.highlight.CircleHighlight;
-import cn.itsite.aguider.highlight.OvalHighlight;
+import cn.itsite.aguider.highlight.Highlight;
 import cn.itsite.aguider.highlight.RectHighlight;
 import cn.itsite.aguider.position.Position;
 
@@ -38,17 +41,8 @@ public class NextActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next);
-
         initView();
         initData();
-
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
     }
 
     private void initView() {
@@ -88,10 +82,16 @@ public class NextActivity extends AppCompatActivity {
     public void simple() {
 
         Guide guide0 = new Guide.Builder()
-                .setPoint(800, 600)
-                .setPosition(Position.left())
-                .setHighlight(new OvalHighlight(300, 150,100))
-                .setView(getDesView("000000000"))
+                .setPoint(textView)
+                .setPosition(Position.bottomLeft())
+                .setHighlight(Highlight.oval())
+                .setView(R.layout.guide_0)
+                .setOnConvertListener(new AGuiderListener.OnConvertListener() {
+                    @Override
+                    public void convert(BaseViewHolder holder, GuiderView guiderView) {
+                        holder.setText(R.id.tv_des, "骚年，没错，就是这里……");
+                    }
+                })
                 .setOnGuideListener(new AGuiderListener.OnGuideListener() {
                     @Override
                     public void onStart(Guide guide) {
@@ -105,13 +105,25 @@ public class NextActivity extends AppCompatActivity {
 
                     }
                 })
-                .setBackground(0x30FF0000)
+//                .setBackground(0x30FF0000)
                 .build();
         Guide guide1 = new Guide.Builder()
                 .setPoint(imageView)
-                .setPosition(Position.right())
+                .setPosition(Position.bottomLeft())
                 .setHighlight(new CircleHighlight(imageView.getWidth(), imageView.getHeight()))
                 .setView(getDesView("1111111"))
+                .setView(R.layout.guide_0)
+                .setOnConvertListener(new AGuiderListener.OnConvertListener() {
+                    @Override
+                    public void convert(BaseViewHolder holder, GuiderView guiderView) {
+                        holder.setText(R.id.tv_des, "对对对，你说的都对……");
+                        ImageView imageView = holder.getView(R.id.iv_arrow);
+                        imageView.setImageResource(R.drawable.arrow_topleft);
+                        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) imageView.getLayoutParams();
+                        layoutParams.gravity = Gravity.RIGHT;
+                        imageView.setLayoutParams(layoutParams);
+                    }
+                })
                 .setOnGuideListener(new AGuiderListener.OnGuideListener() {
                     @Override
                     public void onStart(Guide guide) {
@@ -128,11 +140,18 @@ public class NextActivity extends AppCompatActivity {
                 .setBackground(0x5000FF00)
                 .build();
 
-        Guide guide = new Guide.Builder()
+        Guide guide2 = new Guide.Builder()
                 .setPoint(button)
                 .setPosition(Position.bottom())
                 .setHighlight(new RectHighlight(button.getWidth(), button.getHeight()))
                 .setView(getDesView("2222222222"))
+                .setView(R.layout.guide_0)
+                .setOnConvertListener(new AGuiderListener.OnConvertListener() {
+                    @Override
+                    public void convert(BaseViewHolder holder, GuiderView guiderView) {
+                        holder.setText(R.id.tv_des, "哟，大爷，你来啦……");
+                    }
+                })
                 .setOnGuideListener(new AGuiderListener.OnGuideListener() {
                     @Override
                     public void onStart(Guide guide) {
@@ -150,7 +169,7 @@ public class NextActivity extends AppCompatActivity {
 
         new Guider.Builder()
                 .setAnchor(this)
-                .addGuides(guide0, guide1, guide)
+                .addGuides(guide0, guide1, guide2)
                 .setMode(Guider.MODE_NEXT)//MODE_NEXT：一个接着一个显示。MODE_TOGETHER：一起显示。
                 .setOnGuidertStartListener(new AGuiderListener.OnGuidertStartListener() {
                     @Override

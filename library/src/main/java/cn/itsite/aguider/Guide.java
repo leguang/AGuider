@@ -8,8 +8,6 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import com.socks.library.KLog;
-
 import cn.itsite.aguider.highlight.IHighlight;
 import cn.itsite.aguider.position.IPosition;
 import cn.itsite.aguider.position.Position;
@@ -30,7 +28,8 @@ public class Guide implements IGuide {
     private int targetLayoutId;
     private View view;
     private int viewId;
-    private AGuiderListener.OnGuideListener listener;
+    private AGuiderListener.OnConvertListener onConvertListener;
+    private AGuiderListener.OnGuideListener onGuideListener;
     private ValueAnimator animator;
     private int backgroundColor;
 
@@ -44,14 +43,12 @@ public class Guide implements IGuide {
         this.targetLayoutId = builder.targetLayoutId;
         this.view = builder.view;
         this.viewId = builder.viewId;
-        this.listener = builder.listener;
+        this.onGuideListener = builder.onGuideListener;
+        this.onConvertListener = builder.onConvertListener;
         this.animator = builder.animator;
         this.backgroundColor = builder.backgroundColor;
     }
 
-    public AGuiderListener.OnGuideListener getListener() {
-        return listener;
-    }
 
     public int getX() {
         return x;
@@ -131,8 +128,20 @@ public class Guide implements IGuide {
         this.viewId = viewId;
     }
 
-    public void setListener(AGuiderListener.OnGuideListener listener) {
-        this.listener = listener;
+    public void setOnGuideListener(AGuiderListener.OnGuideListener onGuideListener) {
+        this.onGuideListener = onGuideListener;
+    }
+
+    public AGuiderListener.OnGuideListener getOnGuideListener() {
+        return onGuideListener;
+    }
+
+    public void setOnConvertListener(AGuiderListener.OnConvertListener onConvertListener) {
+        this.onConvertListener = onConvertListener;
+    }
+
+    public AGuiderListener.OnConvertListener getOnConvertListener() {
+        return onConvertListener;
     }
 
     public ValueAnimator getAnimator() {
@@ -164,7 +173,8 @@ public class Guide implements IGuide {
         View targetView;
         int viewId;
         View view;
-        AGuiderListener.OnGuideListener listener;
+        AGuiderListener.OnGuideListener onGuideListener;
+        AGuiderListener.OnConvertListener onConvertListener;
         ValueAnimator animator;
         int backgroundColor = 0xB0000000;
 
@@ -208,7 +218,12 @@ public class Guide implements IGuide {
         }
 
         public Builder setOnGuideListener(@NonNull final AGuiderListener.OnGuideListener listener) {
-            this.listener = listener;
+            this.onGuideListener = listener;
+            return this;
+        }
+
+        public Builder setOnConvertListener(@NonNull final AGuiderListener.OnConvertListener listener) {
+            this.onConvertListener = listener;
             return this;
         }
 

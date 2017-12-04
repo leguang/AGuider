@@ -8,6 +8,11 @@ package cn.itsite.aguider;
  */
 public interface AGuiderListener {
 
+    interface OnConvertListener {
+
+        void convert(BaseViewHolder holder, GuiderView guiderView);
+    }
+
     interface OnGuideListener {
         /**
          * Called when IGuide is started

@@ -16,6 +16,9 @@ public class RoundRectHighlight implements IHighlight {
     public int padding;
     public int radius;
 
+    public RoundRectHighlight() {
+    }
+
     public RoundRectHighlight(int width, int height) {
         this(width, height, 0);
     }
