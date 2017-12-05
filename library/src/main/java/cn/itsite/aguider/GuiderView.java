@@ -103,7 +103,6 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
         }
     }
 
-
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
@@ -197,9 +196,6 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-
-        KLog.e("onAttachedToWindow");
-
         if (onStartListener != null) {
             onStartListener.onStart();
         }
@@ -230,7 +226,6 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
             ((ViewGroup) getParent()).removeView(this);
         }
     }
-
 
     private void showGuide(final Guide guide) {
         reposition();
