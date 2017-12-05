@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -26,7 +27,6 @@ public class Guider {
     private AGuiderListener.OnGuidertStartListener onStartListener;
     private AGuiderListener.OnGuidertStopListener onStopListener;
     private List<Guide> guides;
-    private ViewGroup root;
 
     public Guider(Builder builder) {
         this.anchor = builder.anchor;
@@ -37,40 +37,71 @@ public class Guider {
     }
 
     public Guider show() {
-        Activity activity;
         if (anchor != null) {
-            if (anchor instanceof Activity) {
-                activity = (Activity) anchor;
-            } else if (anchor instanceof Fragment) {
-                Fragment fragment = (Fragment) anchor;
-                activity = fragment.getActivity();
-            } else if (anchor instanceof View) {
-                View view = (View) anchor;
-                if (view.getContext() instanceof Activity) {
-                    activity = (Activity) view.getContext();
-                } else {
-                    throw new IllegalArgumentException("the Context of the view must be an Activity ");
-                }
-            } else {
-                throw new IllegalArgumentException("the anchor's type must be Fragment or Activity or a view ");
-            }
-            root = (ViewGroup) activity.getWindow().getDecorView();
+            //检测锚点。
+            Activity activity = initAnchor(anchor);
             //创建并初始化引导者View。
-            GuiderView guiderView = new GuiderView(activity);
-            guiderView.setGuides(guides);
-            guiderView.setOnGuidertStartListener(onStartListener);
-            guiderView.setOnGuidertStopListener(onStopListener);
-            guiderView.setMode(mode);
+            GuiderView guiderView = initGuiderView(activity);
+            //添加到DecorView中。
+            add2Decor(activity, guiderView);
+        } else {
+            throw new IllegalArgumentException("the Context of the view must be an Activity ");
+        }
+        return this;
+    }
 
-            guiderView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
+    private void add2Decor(Activity activity, GuiderView guiderView) {
+        ViewGroup root = (ViewGroup) activity.getWindow().getDecorView();
+        root.getViewTreeObserver().addOnGlobalLayoutListener(guiderView);
+        root.addView(guiderView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+    }
 
-            root.getViewTreeObserver().addOnGlobalLayoutListener(guiderView);
-            root.addView(guiderView);
+    public Guider showInWindow() {
+        if (anchor != null) {
+            //检测锚点。
+            Activity activity = initAnchor(anchor);
+            //创建并初始化引导者View。
+            GuiderView guiderView = initGuiderView(activity);
+            //添加到当前Window中。
+            add2Window(activity, guiderView);
         } else {
             throw new IllegalArgumentException("the anchor can not null ");
         }
         return this;
+    }
+
+    private void add2Window(Activity activity, GuiderView guiderView) {
+        Window window = activity.getWindow();
+        window.addContentView(guiderView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+    }
+
+    private Activity initAnchor(Object anchor) {
+        if (anchor instanceof Activity) {
+            return (Activity) anchor;
+        } else if (anchor instanceof Fragment) {
+            Fragment fragment = (Fragment) anchor;
+            return fragment.getActivity();
+        } else if (anchor instanceof View) {
+            View view = (View) anchor;
+            if (view.getContext() instanceof Activity) {
+                return (Activity) view.getContext();
+            } else {
+                throw new IllegalArgumentException("the Context of the view must be an Activity ");
+            }
+        } else {
+            throw new IllegalArgumentException("the anchor's type must be Fragment or Activity or a view ");
+        }
+    }
+
+    private GuiderView initGuiderView(Activity activity) {
+        GuiderView guiderView = new GuiderView(activity);
+        guiderView.setGuides(guides);
+        guiderView.setOnGuidertStartListener(onStartListener);
+        guiderView.setOnGuidertStopListener(onStopListener);
+        guiderView.setMode(mode);
+        return guiderView;
     }
 
     public static class Builder {
@@ -124,6 +155,12 @@ public class Guider {
         public Guider show() {
             Guider guider = build();
             guider.show();
+            return guider;
+        }
+
+        public Guider showInWindow() {
+            Guider guider = build();
+            guider.showInWindow();
             return guider;
         }
     }

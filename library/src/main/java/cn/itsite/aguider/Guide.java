@@ -70,21 +70,19 @@ public class Guide implements IGuide {
         return pointView;
     }
 
-    public void setPointView(View pointView) {
-        if (pointView != null) {
-            this.pointView = pointView;
-            int[] location = new int[2];
-            pointView.getLocationInWindow(location);
-            this.x = location[0] + pointView.getWidth() / 2;
-            this.y = location[1] + pointView.getHeight() / 2;
-        }
+    public void setPointView(@NonNull View pointView) {
+        this.pointView = pointView;
+        int[] location = new int[2];
+        pointView.getLocationInWindow(location);
+        this.x = location[0] + pointView.getWidth() / 2;
+        this.y = location[1] + pointView.getHeight() / 2;
     }
 
     public IPosition getPosition() {
         return position;
     }
 
-    public void setPosition(IPosition position) {
+    public void setPosition(@NonNull IPosition position) {
         this.position = position;
     }
 
@@ -100,7 +98,7 @@ public class Guide implements IGuide {
         return targetView;
     }
 
-    public void setTargetView(View targetView) {
+    public void setTargetView(@NonNull View targetView) {
         this.targetView = targetView;
     }
 
@@ -116,7 +114,7 @@ public class Guide implements IGuide {
         return view;
     }
 
-    public void setView(View view) {
+    public void setView(@NonNull View view) {
         this.view = view;
     }
 
@@ -124,7 +122,7 @@ public class Guide implements IGuide {
         return viewId;
     }
 
-    public void setViewId(int viewId) {
+    public void setViewId(@LayoutRes int viewId) {
         this.viewId = viewId;
     }
 
@@ -156,7 +154,7 @@ public class Guide implements IGuide {
         return backgroundColor;
     }
 
-    public void setBackgroundColor(int backgroundColor) {
+    public void setBackgroundColor(@ColorInt int backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
@@ -249,7 +247,7 @@ public class Guide implements IGuide {
             return this;
         }
 
-        public Builder setPosition(IPosition position) {
+        public Builder setPosition(@NonNull IPosition position) {
             this.position = position;
             return this;
         }

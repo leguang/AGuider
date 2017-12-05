@@ -1,11 +1,14 @@
 package cn.itsite.aguider.demo.demo;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -41,6 +44,12 @@ public class NextActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next);
+        if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
+            // 透明状态栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            //实现透明导航栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
         initView();
         initData();
     }
@@ -68,14 +77,20 @@ public class NextActivity extends AppCompatActivity {
     }
 
     private void initData() {
-//        simple();
+        simple();
+
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-
-        simple();
 
     }
 
@@ -167,7 +182,7 @@ public class NextActivity extends AppCompatActivity {
                 .build();
 
         new Guider.Builder()
-                .setAnchor(this)
+                .setAnchor(textView)
                 .addGuides(guide0, guide1, guide2)
                 .setMode(Guider.MODE_NEXT)//MODE_NEXT：一个接着一个显示。MODE_TOGETHER：一起显示。
                 .setOnGuidertStartListener(new AGuiderListener.OnGuidertStartListener() {
@@ -181,7 +196,6 @@ public class NextActivity extends AppCompatActivity {
                     public void onStop() {
                         KLog.e(TAG, "onStop…………");
                     }
-                })
-                .show();
+                }).showInWindow();
     }
 }

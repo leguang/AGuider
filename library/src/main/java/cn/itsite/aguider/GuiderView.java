@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
+import com.socks.library.KLog;
+
 import java.util.List;
 
 import cn.itsite.aguider.highlight.IHighlight;
@@ -78,25 +80,29 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        if (w != oldw && h != oldh) {
-            for (Guide guide : guides) {
-                View pointView = guide.getPointView();
-                if (pointView != null) {
-                    guide.setPointView(pointView);
-                    IHighlight highlight = guide.getHighlight();
-                    if (highlight != null) {
-                        highlight.setWidth(pointView.getWidth());
-                        highlight.setHeight(pointView.getHeight());
-                        highlight.init();
-                        ValueAnimator animator = guide.getAnimator();
-                        if (animator != null) {
-                            guide.getAnimator().setIntValues(0, highlight.getMax());
-                        }
+        KLog.e("onSizeChanged");
+        reposition();
+    }
+
+    private void reposition() {
+        for (Guide guide : guides) {
+            View pointView = guide.getPointView();
+            if (pointView != null) {
+                guide.setPointView(pointView);
+                IHighlight highlight = guide.getHighlight();
+                if (highlight != null) {
+                    highlight.setWidth(pointView.getWidth());
+                    highlight.setHeight(pointView.getHeight());
+                    highlight.init();
+                    ValueAnimator animator = guide.getAnimator();
+                    if (animator != null) {
+                        animator.setIntValues(0, highlight.getMax());
                     }
                 }
             }
         }
     }
+
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -167,10 +173,7 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
                         removeView(currentGuide.getView());
                         ++index;
                         if (index == guides.size()) {
-                            removeAllViews();
-                            if (getParent() instanceof ViewGroup) {
-                                ((ViewGroup) getParent()).removeView(this);
-                            }
+                            dismissGuider();
                         }
                     }
                     break;
@@ -181,10 +184,7 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
                             showGuide(currentGuide);
                         }
                     } else if (mode == Guider.MODE_TOGETHER) {
-                        removeAllViews();
-                        if (getParent() instanceof ViewGroup) {
-                            ((ViewGroup) getParent()).removeView(this);
-                        }
+                        dismissGuider();
                     }
                     break;
                 default:
@@ -197,6 +197,9 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+
+        KLog.e("onAttachedToWindow");
+
         if (onStartListener != null) {
             onStartListener.onStart();
         }
@@ -221,7 +224,17 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
         }
     }
 
+    private void dismissGuider() {
+        removeAllViews();
+        if (getParent() instanceof ViewGroup) {
+            ((ViewGroup) getParent()).removeView(this);
+        }
+    }
+
+
     private void showGuide(final Guide guide) {
+        reposition();
+
         if (guide.getView() != null) {
             addView(guide.getView(), new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
