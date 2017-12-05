@@ -83,10 +83,16 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
                 View pointView = guide.getPointView();
                 if (pointView != null) {
                     guide.setPointView(pointView);
-                    guide.getHighlight().setWidth(pointView.getWidth());
-                    guide.getHighlight().setHeight(pointView.getHeight());
-                    guide.getHighlight().init();
-                    guide.getAnimator().setIntValues(0, guide.getHighlight().getMax());
+                    IHighlight highlight = guide.getHighlight();
+                    if (highlight != null) {
+                        highlight.setWidth(pointView.getWidth());
+                        highlight.setHeight(pointView.getHeight());
+                        highlight.init();
+                        ValueAnimator animator = guide.getAnimator();
+                        if (animator != null) {
+                            guide.getAnimator().setIntValues(0, highlight.getMax());
+                        }
+                    }
                 }
             }
         }
@@ -299,7 +305,9 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
         for (Guide guide : guides) {
             if (guide.getViewId() != 0) {
                 guide.setView(inflate(getContext(), guide.getViewId(), null));
-                guide.getOnConvertListener().convert(new BaseViewHolder(guide.getView()), this);
+                if (guide.getOnConvertListener() != null) {
+                    guide.getOnConvertListener().convert(new BaseViewHolder(guide.getView()), this);
+                }
             }
         }
         this.guides = guides;

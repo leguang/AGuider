@@ -67,6 +67,8 @@ public class Guider {
 
             root.getViewTreeObserver().addOnGlobalLayoutListener(guiderView);
             root.addView(guiderView);
+        } else {
+            throw new IllegalArgumentException("the anchor can not null ");
         }
         return this;
     }
@@ -77,9 +79,6 @@ public class Guider {
         AGuiderListener.OnGuidertStopListener onStopListener;
         List<Guide> guides = new ArrayList<>();
         int mode = MODE_NEXT;
-
-        public Builder() {
-        }
 
         /**
          * 规定：如果有设置锚点，则把锚点作为容器。

@@ -146,7 +146,7 @@ public class NextActivity extends AppCompatActivity {
                 .setOnConvertListener(new AGuiderListener.OnConvertListener() {
                     @Override
                     public void convert(BaseViewHolder holder, GuiderView guiderView) {
-                        holder.setText(R.id.tv_des, "对对对，你说的都对……");
+                        holder.setText(R.id.tv_des, "大爷，你终于来了……");
                         ImageView imageView = holder.getView(R.id.iv_arrow);
                         imageView.setImageResource(R.drawable.arrow_bottom);
                     }
