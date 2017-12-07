@@ -131,13 +131,13 @@ public class TogetherActivity extends AppCompatActivity {
                 .setAnchor(this)
                 .addGuides(guide0, guide1, guide)
                 .setMode(Guider.MODE_NEXT)//MODE_NEXT：一个接着一个显示。MODE_TOGETHER：一起显示。
-                .setOnGuidertStartListener(new AGuiderListener.OnGuidertStartListener() {
+                .addOnGuidertStartListener(new AGuiderListener.OnGuiderStartListener() {
                     @Override
                     public void onStart() {
                         KLog.e(TAG, "onStart…………");
                     }
                 })
-                .setOnGuidertStopListener(new AGuiderListener.OnGuidertStopListener() {
+                .addOnGuidertStopListener(new AGuiderListener.OnGuiderStopListener() {
                     @Override
                     public void onStop() {
                         KLog.e(TAG, "onStop…………");

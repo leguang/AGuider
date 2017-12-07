@@ -38,8 +38,8 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     private Paint mPaint;
     private Guide currentGuide;
     private int index = 0;
-    private AGuiderListener.OnGuidertStartListener onStartListener;
-    private AGuiderListener.OnGuidertStopListener onStopListener;
+    private List<AGuiderListener.OnGuiderStartListener> onStartListeners;
+    private List<AGuiderListener.OnGuiderStopListener> onStopListeners;
     private List<Guide> guides;
     private int mode = MODE_NEXT;
 
@@ -80,7 +80,6 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        KLog.e("onSizeChanged");
         reposition();
     }
 
@@ -172,7 +171,7 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
                         removeView(currentGuide.getView());
                         ++index;
                         if (index == guides.size()) {
-                            dismissGuider();
+                            dismiss();
                         }
                     }
                     break;
@@ -183,7 +182,7 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
                             showGuide(currentGuide);
                         }
                     } else if (mode == Guider.MODE_TOGETHER) {
-                        dismissGuider();
+                        dismiss();
                     }
                     break;
                 default:
@@ -196,8 +195,10 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (onStartListener != null) {
-            onStartListener.onStart();
+        if (onStartListeners != null) {
+            for (int i = 0; i < onStartListeners.size(); i++) {
+                onStartListeners.get(i).onStart();
+            }
         }
 
         if (mode == MODE_NEXT) {
@@ -215,12 +216,14 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (onStopListener != null) {
-            onStopListener.onStop();
+        if (onStopListeners != null) {
+            for (int i = 0; i < onStopListeners.size(); i++) {
+                onStopListeners.get(i).onStop();
+            }
         }
     }
 
-    private void dismissGuider() {
+    public void dismiss() {
         removeAllViews();
         if (getParent() instanceof ViewGroup) {
             ((ViewGroup) getParent()).removeView(this);
@@ -289,20 +292,20 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
         this.index = index;
     }
 
-    public AGuiderListener.OnGuidertStartListener getOnGuidertStartListener() {
-        return onStartListener;
+    public List<AGuiderListener.OnGuiderStartListener> getOnGuidertStartListeners() {
+        return onStartListeners;
     }
 
-    public void setOnGuidertStartListener(AGuiderListener.OnGuidertStartListener onStartListener) {
-        this.onStartListener = onStartListener;
+    public void setOnGuidertStartListeners(List<AGuiderListener.OnGuiderStartListener> onStartListeners) {
+        this.onStartListeners = onStartListeners;
     }
 
-    public AGuiderListener.OnGuidertStopListener getOnGuidertStopListener() {
-        return onStopListener;
+    public List<AGuiderListener.OnGuiderStopListener> getOnGuidertStopListenesr() {
+        return onStopListeners;
     }
 
-    public void setOnGuidertStopListener(AGuiderListener.OnGuidertStopListener onStopListener) {
-        this.onStopListener = onStopListener;
+    public void setOnGuidertStopListeners(List<AGuiderListener.OnGuiderStopListener> onStopListeners) {
+        this.onStopListeners = onStopListeners;
     }
 
     public List<Guide> getGuides() {

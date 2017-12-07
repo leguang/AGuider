@@ -25,14 +25,15 @@ public class Guider {
     public static final int MODE_TOGETHER = 1;
     private int mode = MODE_NEXT;
     private Object anchor;
-    private AGuiderListener.OnGuidertStartListener onStartListener;
-    private AGuiderListener.OnGuidertStopListener onStopListener;
+    private List<AGuiderListener.OnGuiderStartListener> onStartListeners;
+    private List<AGuiderListener.OnGuiderStopListener> onStopListeners;
     private List<Guide> guides;
+    private GuiderView guiderView;
 
     public Guider(Builder builder) {
         this.anchor = builder.anchor;
-        this.onStartListener = builder.onStartListener;
-        this.onStopListener = builder.onStopListener;
+        this.onStartListeners = builder.onStartListeners;
+        this.onStopListeners = builder.onStopListeners;
         this.guides = builder.guides;
         this.mode = builder.mode;
     }
@@ -42,7 +43,7 @@ public class Guider {
             //检测锚点。
             Activity activity = initAnchor(anchor);
             //创建并初始化引导者View。
-            GuiderView guiderView = initGuiderView(activity);
+            initGuiderView(activity);
             //添加到DecorView中。
             add2Decor(activity, guiderView);
         } else {
@@ -63,11 +64,11 @@ public class Guider {
             //检测锚点。
             Activity activity = initAnchor(anchor);
             //创建并初始化引导者View。
-            GuiderView guiderView = initGuiderView(activity);
+            initGuiderView(activity);
             //添加到当前Window中。
             add2Window(activity, guiderView);
         } else {
-            throw new IllegalArgumentException("the anchor can not null ");
+            throw new NullPointerException("the anchor can not null ");
         }
         return this;
     }
@@ -98,18 +99,40 @@ public class Guider {
     }
 
     private GuiderView initGuiderView(Activity activity) {
-        GuiderView guiderView = new GuiderView(activity);
+        guiderView = new GuiderView(activity);
         guiderView.setGuides(guides);
-        guiderView.setOnGuidertStartListener(onStartListener);
-        guiderView.setOnGuidertStopListener(onStopListener);
+        guiderView.setOnGuidertStartListeners(onStartListeners);
+        guiderView.setOnGuidertStopListeners(onStopListeners);
         guiderView.setMode(mode);
         return guiderView;
     }
 
+    public void dismiss() {
+        if (guiderView != null) {
+            guiderView.dismiss();
+        }
+    }
+
+    public Guider addOnGuidertStartListener(AGuiderListener.OnGuiderStartListener listener) {
+        if (onStartListeners == null) {
+            onStartListeners = new ArrayList<>();
+        }
+        onStartListeners.add(listener);
+        return this;
+    }
+
+    public Guider addOnGuidertStopListener(AGuiderListener.OnGuiderStopListener listener) {
+        if (onStopListeners == null) {
+            onStopListeners = new ArrayList<>();
+        }
+        onStopListeners.add(listener);
+        return this;
+    }
+
     public static class Builder {
         Object anchor;
-        AGuiderListener.OnGuidertStartListener onStartListener;
-        AGuiderListener.OnGuidertStopListener onStopListener;
+        List<AGuiderListener.OnGuiderStartListener> onStartListeners = new ArrayList<>();
+        List<AGuiderListener.OnGuiderStopListener> onStopListeners = new ArrayList<>();
         List<Guide> guides = new ArrayList<>();
         int mode = MODE_NEXT;
 
@@ -135,13 +158,19 @@ public class Guider {
             return this;
         }
 
-        public Builder setOnGuidertStartListener(AGuiderListener.OnGuidertStartListener listener) {
-            this.onStartListener = listener;
+        public Builder addOnGuidertStartListener(AGuiderListener.OnGuiderStartListener listener) {
+            if (onStartListeners == null) {
+                onStartListeners = new ArrayList<>();
+            }
+            onStartListeners.add(listener);
             return this;
         }
 
-        public Builder setOnGuidertStopListener(AGuiderListener.OnGuidertStopListener listener) {
-            this.onStopListener = listener;
+        public Builder addOnGuidertStopListener(AGuiderListener.OnGuiderStopListener listener) {
+            if (onStopListeners == null) {
+                onStopListeners = new ArrayList<>();
+            }
+            onStopListeners.add(listener);
             return this;
         }
 

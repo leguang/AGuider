@@ -3,12 +3,10 @@ package cn.itsite.aguider.demo.demo;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -17,6 +15,7 @@ import android.widget.TextView;
 
 import com.socks.library.KLog;
 
+import cn.itsite.aguider.AGuider;
 import cn.itsite.aguider.AGuiderListener;
 import cn.itsite.aguider.BaseViewHolder;
 import cn.itsite.aguider.Guide;
@@ -34,7 +33,7 @@ import cn.itsite.aguider.position.Position;
  * @E-mail langmanleguang@qq.com
  * @time 2016/11/24 0024 9:08
  */
-public class NextActivity extends AppCompatActivity {
+public class NextActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = NextActivity.class.getSimpleName();
     private TextView textView;
     private ImageView imageView;
@@ -58,6 +57,9 @@ public class NextActivity extends AppCompatActivity {
         textView = ((TextView) findViewById(R.id.textView));
         imageView = ((ImageView) findViewById(R.id.imageView));
         button = ((Button) findViewById(R.id.button));
+        textView.setOnClickListener(this);
+        imageView.setOnClickListener(this);
+        button.setOnClickListener(this);
     }
 
 
@@ -77,15 +79,29 @@ public class NextActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        simple();
+        new AGuider.Builder()
+                .addGuiders(simple(), simple())
+                .setOnAGuidertStartListener(new AGuiderListener.OnAGuiderStartListener() {
+                    @Override
+                    public void onStart() {
+                        KLog.e("AGuider--onStart");
+                    }
+                })
+                .setOnAGuidertStopListener(new AGuiderListener.OnAGuiderStopListener() {
+                    @Override
+                    public void onStop() {
+                        KLog.e("AGuider--onStop");
 
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
+                    }
+                })
+                .show();
 
-            }
-        });
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        initData();
     }
 
     @Override
@@ -94,7 +110,7 @@ public class NextActivity extends AppCompatActivity {
 
     }
 
-    public void simple() {
+    public Guider simple() {
 
         Guide guide0 = new Guide.Builder()
                 .setPoint(textView)
@@ -181,21 +197,21 @@ public class NextActivity extends AppCompatActivity {
                 })
                 .build();
 
-        new Guider.Builder()
+        return new Guider.Builder()
                 .setAnchor(textView)
                 .addGuides(guide0, guide1, guide2)
                 .setMode(Guider.MODE_NEXT)//MODE_NEXT：一个接着一个显示。MODE_TOGETHER：一起显示。
-                .setOnGuidertStartListener(new AGuiderListener.OnGuidertStartListener() {
+                .addOnGuidertStartListener(new AGuiderListener.OnGuiderStartListener() {
                     @Override
                     public void onStart() {
                         KLog.e(TAG, "onStart…………");
                     }
                 })
-                .setOnGuidertStopListener(new AGuiderListener.OnGuidertStopListener() {
+                .addOnGuidertStopListener(new AGuiderListener.OnGuiderStopListener() {
                     @Override
                     public void onStop() {
                         KLog.e(TAG, "onStop…………");
                     }
-                }).showInWindow();
+                }).build();
     }
 }

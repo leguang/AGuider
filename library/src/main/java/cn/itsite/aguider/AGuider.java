@@ -1,8 +1,6 @@
 package cn.itsite.aguider;
 
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,65 +14,78 @@ import java.util.List;
  */
 public class AGuider {
     public static final String TAG = AGuider.class.getSimpleName();
-    private View mAnchor;
-    private AGuiderListener.OnGuidertStartListener onGuidertStartListener;
-    private AGuiderListener.OnGuidertStopListener onGuidertStopListener;
-    private List<Guide> guides;
-    private int backgroundColor;
+    private AGuiderListener.OnAGuiderStartListener onStartListener;
+    private AGuiderListener.OnAGuiderStopListener onStopListener;
+    private List<Guider> guiders;
+    private int index = 0;
 
     public AGuider(Builder builder) {
-        this.mAnchor = builder.mAnchor;
-        this.onGuidertStartListener = builder.onGuidertStartListener;
-        this.onGuidertStopListener = builder.onGuidertStopListener;
-        this.guides = builder.guides;
-        this.backgroundColor = builder.backgroundColor;
+        this.onStartListener = builder.onStartListener;
+        this.onStopListener = builder.onStopListener;
+        this.guiders = builder.guiders;
+        init();
+    }
+
+    private void init() {
+        for (Guider guider : guiders) {
+            guider.addOnGuidertStartListener(new OnGuiderStartListener());
+            guider.addOnGuidertStopListener(new OnGuiderStopListener());
+        }
     }
 
     public AGuider show() {
-
+        if (guiders != null && !guiders.isEmpty()) {
+            guiders.get(index).show();
+        }
         return this;
     }
 
+    public class OnGuiderStartListener implements AGuiderListener.OnGuiderStartListener {
+
+        @Override
+        public void onStart() {
+            if (index == 0) {
+                onStartListener.onStart();
+            }
+        }
+    }
+
+    public class OnGuiderStopListener implements AGuiderListener.OnGuiderStopListener {
+
+        @Override
+        public void onStop() {
+            if (++index < guiders.size()) {
+                guiders.get(index).show();
+            }
+
+            if (index == guiders.size()) {
+                onStopListener.onStop();
+            }
+        }
+    }
 
     public static class Builder {
-        private View mAnchor;
-        private AGuiderListener.OnGuidertStartListener onGuidertStartListener;
-        private AGuiderListener.OnGuidertStopListener onGuidertStopListener;
-        private List<Guide> guides = new ArrayList<>();
-        private int backgroundColor;
+        private AGuiderListener.OnAGuiderStartListener onStartListener;
+        private AGuiderListener.OnAGuiderStopListener onStopListener;
+        private List<Guider> guiders = new ArrayList<>();
 
-        public Builder() {
-        }
-
-        public Builder addGuide(@NonNull Guide guide) {
-            this.guides.add(guide);
+        public Builder addGuider(@NonNull Guider guider) {
+            this.guiders.add(guider);
             return this;
         }
 
-        public Builder addGuides(@NonNull Guide... guides) {
-            this.guides.addAll(Arrays.asList(guides));
+        public Builder addGuiders(@NonNull Guider... guiders) {
+            this.guiders.addAll(Arrays.asList(guiders));
             return this;
         }
 
-        /**
-         * 引导层背景色
-         */
-        public Builder background(@ColorInt int backgroundColor) {
-            this.backgroundColor = backgroundColor;
+        public Builder setOnAGuidertStartListener(AGuiderListener.OnAGuiderStartListener listener) {
+            this.onStartListener = listener;
             return this;
         }
 
-
-        /**
-         * 设置引导层隐藏，显示监听
-         */
-        public Builder OnGuidertStartListener(AGuiderListener.OnGuidertStartListener listener) {
-            this.onGuidertStartListener = listener;
-            return this;
-        }
-
-        public Builder setOnGuidertStopListener(AGuiderListener.OnGuidertStopListener listener) {
-            this.onGuidertStopListener = listener;
+        public Builder setOnAGuidertStopListener(AGuiderListener.OnAGuiderStopListener listener) {
+            this.onStopListener = listener;
             return this;
         }
 

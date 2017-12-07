@@ -25,16 +25,30 @@ public interface AGuiderListener {
         void onStop(Guide guide);
     }
 
-    interface OnGuidertStartListener {
+    interface OnGuiderStartListener {
         /**
          * Called when guider is started
          */
         void onStart();
     }
 
-    interface OnGuidertStopListener {
+    interface OnGuiderStopListener {
         /**
          * Called when Spotlight is ended
+         */
+        void onStop();
+    }
+
+    interface OnAGuiderStartListener {
+        /**
+         * Called when aguider is started
+         */
+        void onStart();
+    }
+
+    interface OnAGuiderStopListener {
+        /**
+         * Called when aguider is ended
          */
         void onStop();
     }
