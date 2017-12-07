@@ -21,7 +21,7 @@
         <activity android:name=".demo.FragmentActivity" />
         <activity android:name=".demo.TogetherActivity" />
         <activity android:name=".demo.ListActivity" />
-        <activity android:name=".demo.AnywhereActivity"></activity>
+        <activity android:name=".demo.AnywhereActivity"/>
     </application>
 
 </manifest>
