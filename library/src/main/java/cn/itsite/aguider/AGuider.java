@@ -40,11 +40,35 @@ public class AGuider {
         return this;
     }
 
+    /**
+     * dismiss current GuiderView.
+     */
+    public void dismissGuider() {
+        if (guiders != null && !guiders.isEmpty()) {
+            if (index < guiders.size()) {
+                guiders.get(index).dismiss();
+            }
+        }
+    }
+
+    /**
+     * dismiss all GuiderView.
+     */
+    public void dismiss() {
+        if (guiders != null && !guiders.isEmpty()) {
+            if (index < guiders.size()) {
+                Guider guider = guiders.get(index);
+                guiders.clear();
+                guider.dismiss();
+            }
+        }
+    }
+
     public class OnGuiderStartListener implements AGuiderListener.OnGuiderStartListener {
 
         @Override
         public void onStart() {
-            if (index == 0) {
+            if (index == 0 && onStartListener != null) {
                 onStartListener.onStart();
             }
         }
@@ -54,12 +78,14 @@ public class AGuider {
 
         @Override
         public void onStop() {
-            if (++index < guiders.size()) {
-                guiders.get(index).show();
-            }
+            if (guiders != null) {
+                if (++index < guiders.size()) {
+                    guiders.get(index).show();
+                }
 
-            if (index == guiders.size()) {
-                onStopListener.onStop();
+                if (index == guiders.size() && onStopListener != null) {
+                    onStopListener.onStop();
+                }
             }
         }
     }

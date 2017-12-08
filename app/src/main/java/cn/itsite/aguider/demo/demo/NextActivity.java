@@ -1,12 +1,16 @@
 package cn.itsite.aguider.demo.demo;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.socks.library.KLog;
@@ -17,6 +21,7 @@ import cn.itsite.aguider.BaseViewHolder;
 import cn.itsite.aguider.Guide;
 import cn.itsite.aguider.Guider;
 import cn.itsite.aguider.GuiderView;
+import cn.itsite.aguider.demo.MainActivity;
 import cn.itsite.aguider.demo.R;
 import cn.itsite.aguider.highlight.CircleHighlight;
 import cn.itsite.aguider.highlight.Highlight;
@@ -34,6 +39,7 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
     private TextView textView;
     private ImageView imageView;
     private Button button;
+    private AGuider show;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,15 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_next);
         initView();
         initData();
+
+        button.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                show.dismiss();
+            }
+        },5000);
+
+
     }
 
     private void initView() {
@@ -53,7 +68,7 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initData() {
-        new AGuider.Builder()
+         show = new AGuider.Builder()
                 .addGuiders(simple(), simple())
                 .setOnAGuidertStartListener(new AGuiderListener.OnAGuiderStartListener() {
                     @Override
