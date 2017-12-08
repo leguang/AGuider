@@ -83,7 +83,7 @@ public class AGuider {
                     guiders.get(index).show();
                 }
 
-                if (index == guiders.size() && onStopListener != null) {
+                if (index >= guiders.size() && onStopListener != null) {
                     onStopListener.onStop();
                 }
             }
