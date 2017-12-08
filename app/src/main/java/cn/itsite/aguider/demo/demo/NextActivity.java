@@ -1,14 +1,10 @@
 package cn.itsite.aguider.demo.demo;
 
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,12 +39,6 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next);
-        if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
-            // 透明状态栏
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            //实现透明导航栏
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
         initView();
         initData();
     }
@@ -60,22 +50,6 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
         textView.setOnClickListener(this);
         imageView.setOnClickListener(this);
         button.setOnClickListener(this);
-    }
-
-
-    public View getDesView(String s) {
-        final TextView description = new TextView(this);
-        description.setText(s + "...........\n..............\n.................\n..");
-        description.setTextColor(Color.parseColor("#000000"));
-        description.setGravity(Gravity.CENTER);
-        description.setTextColor(Color.parseColor("#ff0000"));
-        description.setPadding(50, 50, 0, 0);
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.BOTTOM;
-        description.setLayoutParams(layoutParams);
-        description.setBackgroundColor(Color.parseColor("#77ff00ff"));
-        return description;
     }
 
     private void initData() {
@@ -95,19 +69,11 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 })
                 .show();
-
-
     }
 
     @Override
     public void onClick(View v) {
         initData();
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-
     }
 
     public Guider simple() {

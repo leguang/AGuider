@@ -12,13 +12,12 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-
-import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -205,6 +204,8 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
             if (guides != null && !guides.isEmpty()) {
                 currentGuide = guides.get(index);
                 showGuide(currentGuide);
+            } else {
+                Log.d(TAG, "the GuiderView has no guide!");
             }
         } else if (mode == Guider.MODE_TOGETHER) {
             for (Guide guide : guides) {
