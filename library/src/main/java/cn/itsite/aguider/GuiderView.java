@@ -33,7 +33,7 @@ import static cn.itsite.aguider.Guider.MODE_NEXT;
  * @time 2016/11/24 0024 9:08
  */
 public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobalLayoutListener {
-    public static final String TAG = GuiderView.class.getSimpleName();
+    public static final String TAG = GuiderView.class.getName();
     private Paint mPaint;
     private Guide currentGuide;
     private int index = 0;
@@ -96,6 +96,23 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
                     if (animator != null) {
                         animator.setIntValues(0, highlight.getMax());
                     }
+                }
+            }
+        }
+    }
+
+    private void reposition(Guide guide) {
+        View pointView = guide.getPointView();
+        if (pointView != null) {
+            guide.setPointView(pointView);
+            IHighlight highlight = guide.getHighlight();
+            if (highlight != null) {
+                highlight.setWidth(pointView.getWidth());
+                highlight.setHeight(pointView.getHeight());
+                highlight.init();
+                ValueAnimator animator = guide.getAnimator();
+                if (animator != null) {
+                    animator.setIntValues(0, highlight.getMax());
                 }
             }
         }
@@ -226,13 +243,20 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
 
     public void dismiss() {
         removeAllViews();
-        if (getParent() instanceof ViewGroup) {
+        if (getParent() != null && getParent() instanceof ViewGroup) {
             ((ViewGroup) getParent()).removeView(this);
         }
     }
 
+    public boolean isVisible() {
+        if (getParent() != null && getParent() instanceof ViewGroup) {
+            return ((ViewGroup) getParent()).findViewWithTag(TAG) != null;
+        }
+        return false;
+    }
+
     private void showGuide(final Guide guide) {
-        reposition();
+        reposition(guide);
 
         if (guide.getView() != null) {
             addView(guide.getView(), new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,

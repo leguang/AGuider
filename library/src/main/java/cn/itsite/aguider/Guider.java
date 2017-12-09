@@ -110,7 +110,12 @@ public class Guider {
     public void dismiss() {
         if (guiderView != null) {
             guiderView.dismiss();
+            guiderView = null;
         }
+    }
+
+    public boolean isVisible() {
+        return guiderView.isVisible();
     }
 
     public Guider addOnGuidertStartListener(AGuiderListener.OnGuiderStartListener listener) {

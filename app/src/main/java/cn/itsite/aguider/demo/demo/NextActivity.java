@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.socks.library.KLog;
 
-import cn.itsite.aguider.AGuider;
 import cn.itsite.aguider.AGuiderListener;
 import cn.itsite.aguider.BaseViewHolder;
 import cn.itsite.aguider.Guide;
@@ -38,6 +37,7 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
     private TextView textView;
     private ImageView imageView;
     private Button button;
+    private Guider guider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,13 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
         }
         initView();
         initData();
+
+        button.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                KLog.e("guider.isVisible()-->" + guider.isVisible());
+            }
+        }, 5000);
     }
 
     private void initView() {
@@ -79,23 +86,24 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initData() {
-        new AGuider.Builder()
-                .addGuiders(simple(), simple())
-                .setOnAGuidertStartListener(new AGuiderListener.OnAGuiderStartListener() {
-                    @Override
-                    public void onStart() {
-                        KLog.e("AGuider--onStart");
-                    }
-                })
-                .setOnAGuidertStopListener(new AGuiderListener.OnAGuiderStopListener() {
-                    @Override
-                    public void onStop() {
-                        KLog.e("AGuider--onStop");
+//        new AGuider.Builder()
+//                .addGuiders(simple(0), simple(1))
+//                .setOnAGuidertStartListener(new AGuiderListener.OnAGuiderStartListener() {
+//                    @Override
+//                    public void onStart() {
+//                        KLog.e("AGuider--onStart");
+//                    }
+//                })
+//                .setOnAGuidertStopListener(new AGuiderListener.OnAGuiderStopListener() {
+//                    @Override
+//                    public void onStop() {
+//                        KLog.e("AGuider--onStop");
+//
+//                    }
+//                })
+//                .show();
 
-                    }
-                })
-                .show();
-
+        simple(0);
 
     }
 
@@ -104,7 +112,7 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
         initData();
     }
 
-    public Guider simple() {
+    public Guider simple(int index) {
 
         Guide guide0 = new Guide.Builder()
                 .setPoint(textView)
@@ -191,10 +199,10 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
                 })
                 .build();
 
-        return new Guider.Builder()
+        guider = new Guider.Builder()
                 .setAnchor(textView)
                 .addGuides(guide0, guide1, guide2)
-                .setMode(Guider.MODE_NEXT)//MODE_NEXT：一个接着一个显示。MODE_TOGETHER：一起显示。
+                .setMode(index)//MODE_NEXT：一个接着一个显示。MODE_TOGETHER：一起显示。
                 .addOnGuidertStartListener(new AGuiderListener.OnGuiderStartListener() {
                     @Override
                     public void onStart() {
@@ -206,6 +214,8 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
                     public void onStop() {
                         KLog.e(TAG, "onStop…………");
                     }
-                }).build();
+                }).show();
+
+        return guider;
     }
 }

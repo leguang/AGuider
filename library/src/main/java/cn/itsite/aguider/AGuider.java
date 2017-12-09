@@ -64,6 +64,15 @@ public class AGuider {
         }
     }
 
+    public boolean isVisible() {
+        if (guiders != null && !guiders.isEmpty()) {
+            if (index < guiders.size()) {
+                return guiders.get(index).isVisible();
+            }
+        }
+        return false;
+    }
+
     public class OnGuiderStartListener implements AGuiderListener.OnGuiderStartListener {
 
         @Override
