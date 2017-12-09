@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
+import cn.itsite.aguider.highlight.Highlight;
 import cn.itsite.aguider.highlight.IHighlight;
 import cn.itsite.aguider.position.IPosition;
 import cn.itsite.aguider.position.Position;
@@ -166,7 +167,7 @@ public class Guide implements IGuide {
         int y;
         View pointView;
         IPosition position = Position.center();
-        IHighlight highlight;
+        IHighlight highlight = Highlight.rect();
         int targetLayoutId;
         View targetView;
         int viewId;
@@ -225,9 +226,7 @@ public class Guide implements IGuide {
             this.targetLayoutId = 0;
             this.targetView = null;
             this.highlight = highlight;
-            this.animator = ValueAnimator.ofInt(0, highlight.getMax());
-            this.animator.setInterpolator(new DecelerateInterpolator(2F));
-            this.animator.setDuration(1500);
+
             return this;
         }
 
@@ -271,6 +270,9 @@ public class Guide implements IGuide {
         }
 
         public Guide build() {
+            this.animator = ValueAnimator.ofInt(0, highlight.getMax());
+            this.animator.setInterpolator(new DecelerateInterpolator(2F));
+            this.animator.setDuration(1500);
             return new Guide(this);
         }
     }

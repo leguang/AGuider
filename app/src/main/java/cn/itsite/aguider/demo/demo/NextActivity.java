@@ -43,21 +43,8 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next);
-        if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
-            // 透明状态栏
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            //实现透明导航栏
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
         initView();
         initData();
-
-        button.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                KLog.e("guider.isVisible()-->" + guider.isVisible());
-            }
-        }, 5000);
     }
 
     private void initView() {

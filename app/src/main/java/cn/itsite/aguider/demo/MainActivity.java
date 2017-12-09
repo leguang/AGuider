@@ -10,6 +10,7 @@ import cn.itsite.aguider.demo.demo.ActivityActivity;
 import cn.itsite.aguider.demo.demo.AnywhereActivity;
 import cn.itsite.aguider.demo.demo.FragmentActivity;
 import cn.itsite.aguider.demo.demo.NextActivity;
+import cn.itsite.aguider.demo.demo.SimpleActivity;
 import cn.itsite.aguider.demo.demo.TogetherActivity;
 
 /**
@@ -20,6 +21,7 @@ import cn.itsite.aguider.demo.demo.TogetherActivity;
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
+    private Button btSimple;
     private Button btNext;
     private Button btTogether;
     private Button btActivity;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
+        btSimple = (Button) findViewById(R.id.bt_simple);
         btNext = (Button) findViewById(R.id.bt_next);
         btTogether = (Button) findViewById(R.id.bt_together);
         btActivity = (Button) findViewById(R.id.bt_activity);
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initData() {
+        btSimple.setOnClickListener(this);
         btNext.setOnClickListener(this);
         btTogether.setOnClickListener(this);
         btActivity.setOnClickListener(this);
@@ -53,6 +57,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.bt_simple:
+                startActivity(new Intent(this, SimpleActivity.class));
+                break;
             case R.id.bt_next:
                 startActivity(new Intent(this, NextActivity.class));
                 break;
