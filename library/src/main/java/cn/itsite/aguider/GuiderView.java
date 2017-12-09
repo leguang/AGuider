@@ -212,8 +212,8 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (onStartListeners != null) {
-            for (int i = 0; i < onStartListeners.size(); i++) {
-                onStartListeners.get(i).onStart();
+            for (AGuiderListener.OnGuiderStartListener onStartListener : onStartListeners) {
+                onStartListener.onStart();
             }
         }
 
@@ -235,8 +235,8 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (onStopListeners != null) {
-            for (int i = 0; i < onStopListeners.size(); i++) {
-                onStopListeners.get(i).onStop();
+            for (AGuiderListener.OnGuiderStopListener onStopListener : onStopListeners) {
+                onStopListener.onStop();
             }
         }
     }

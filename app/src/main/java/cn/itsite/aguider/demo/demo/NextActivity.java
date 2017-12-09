@@ -200,7 +200,7 @@ public class NextActivity extends AppCompatActivity implements View.OnClickListe
                 .build();
 
         guider = new Guider.Builder()
-                .setAnchor(textView)
+                .setAnchor(this)
                 .addGuides(guide0, guide1, guide2)
                 .setMode(index)//MODE_NEXT：一个接着一个显示。MODE_TOGETHER：一起显示。
                 .addOnGuidertStartListener(new AGuiderListener.OnGuiderStartListener() {

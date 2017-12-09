@@ -208,11 +208,7 @@ public class Guide implements IGuide {
          */
         public Builder setPoint(@NonNull View pointView) {
             this.pointView = pointView;
-            int[] location = new int[2];
-            pointView.getLocationInWindow(location);
-            int x = location[0] + pointView.getWidth() / 2;
-            int y = location[1] + pointView.getHeight() / 2;
-            return setPoint(x, y);
+            return this;
         }
 
         public Builder setOnGuideListener(@NonNull final AGuiderListener.OnGuideListener listener) {
