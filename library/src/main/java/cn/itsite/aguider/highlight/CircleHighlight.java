@@ -3,8 +3,6 @@ package cn.itsite.aguider.highlight;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import com.socks.library.KLog;
-
 /**
  * @author leguang
  * @version v0.0.0
