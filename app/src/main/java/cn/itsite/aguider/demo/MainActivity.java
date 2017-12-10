@@ -6,9 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import cn.itsite.aguider.demo.demo.ActivityActivity;
 import cn.itsite.aguider.demo.demo.AnywhereActivity;
+import cn.itsite.aguider.demo.demo.CombinationActivity;
 import cn.itsite.aguider.demo.demo.FragmentActivity;
+import cn.itsite.aguider.demo.demo.ListActivity;
 import cn.itsite.aguider.demo.demo.NextActivity;
 import cn.itsite.aguider.demo.demo.SimpleActivity;
 import cn.itsite.aguider.demo.demo.TogetherActivity;
@@ -24,9 +25,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btSimple;
     private Button btNext;
     private Button btTogether;
-    private Button btActivity;
+    private Button btList;
     private Button btFragment;
     private Button btAny;
+    private Button btCombination;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +42,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btSimple = (Button) findViewById(R.id.bt_simple);
         btNext = (Button) findViewById(R.id.bt_next);
         btTogether = (Button) findViewById(R.id.bt_together);
-        btActivity = (Button) findViewById(R.id.bt_activity);
+        btList = (Button) findViewById(R.id.bt_list);
         btFragment = (Button) findViewById(R.id.bt_fragment);
         btAny = (Button) findViewById(R.id.bt_any);
+        btCombination = (Button) findViewById(R.id.bt_combination);
     }
 
     private void initData() {
         btSimple.setOnClickListener(this);
         btNext.setOnClickListener(this);
         btTogether.setOnClickListener(this);
-        btActivity.setOnClickListener(this);
+        btList.setOnClickListener(this);
         btFragment.setOnClickListener(this);
         btAny.setOnClickListener(this);
+        btCombination.setOnClickListener(this);
     }
 
     @Override
@@ -66,14 +70,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bt_together:
                 startActivity(new Intent(this, TogetherActivity.class));
                 break;
-            case R.id.bt_activity:
-                startActivity(new Intent(this, ActivityActivity.class));
+            case R.id.bt_list:
+                startActivity(new Intent(this, ListActivity.class));
                 break;
             case R.id.bt_fragment:
                 startActivity(new Intent(this, FragmentActivity.class));
                 break;
             case R.id.bt_any:
                 startActivity(new Intent(this, AnywhereActivity.class));
+                break;
+            case R.id.bt_combination:
+                startActivity(new Intent(this, CombinationActivity.class));
                 break;
             default:
         }

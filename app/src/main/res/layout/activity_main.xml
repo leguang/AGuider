@@ -26,10 +26,10 @@
         android:textAllCaps="false" />
 
     <Button
-        android:id="@+id/bt_activity"
+        android:id="@+id/bt_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Activity中显示"
+        android:text="列表中显示"
         android:textAllCaps="false" />
 
     <Button
@@ -46,4 +46,10 @@
         android:text="任意位置添加高亮"
         android:textAllCaps="false" />
 
+    <Button
+        android:id="@+id/bt_combination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="组合用法"
+        android:textAllCaps="false" />
 </LinearLayout>

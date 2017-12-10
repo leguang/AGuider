@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.socks.library.KLog;
-
 import cn.itsite.aguider.AGuiderListener;
 import cn.itsite.aguider.BaseViewHolder;
 import cn.itsite.aguider.Guide;
@@ -21,6 +19,7 @@ import cn.itsite.aguider.Guider;
 import cn.itsite.aguider.GuiderView;
 import cn.itsite.aguider.demo.R;
 import cn.itsite.aguider.highlight.CircleHighlight;
+import cn.itsite.aguider.highlight.Highlight;
 import cn.itsite.aguider.highlight.RectHighlight;
 import cn.itsite.aguider.position.Position;
 
@@ -30,7 +29,7 @@ import cn.itsite.aguider.position.Position;
  * @E-mail langmanleguang@qq.com
  * @time 2017/12/1 0001 10:14
  */
-public class GuideFragment extends Fragment {
+public class GuideFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "GuideFragment";
     private TextView textView;
     private ImageView imageView;
@@ -39,54 +38,59 @@ public class GuideFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_next, container, false);
-        return view;
+        return inflater.inflate(R.layout.activity_next, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
-        initData();
+        initGuider();
     }
 
     private void initView(View view) {
         textView = ((TextView) view.findViewById(R.id.textView));
         imageView = ((ImageView) view.findViewById(R.id.imageView));
         button = ((Button) view.findViewById(R.id.button));
+        textView.setOnClickListener(this);
+        imageView.setOnClickListener(this);
+        button.setOnClickListener(this);
     }
 
-    private void initData() {
-        simple();
+    @Override
+    public void onClick(View v) {
+        initGuider();
     }
 
-    public void simple() {
-
+    public void initGuider() {
         Guide guide0 = new Guide.Builder()
+                /**
+                 * 设置想要添加高亮的View。
+                 */
                 .setPoint(textView)
+                /**
+                 * 设置指引View的相对位置，有上下左右中等多个位置，可实现IPosition接口自定义位置。
+                 */
                 .setPosition(Position.bottomLeft())
-//                .setHighlight(Highlight.oval())
+                /**
+                 * 设置高亮，有多种形状可选择，可实现IHighlight接口自定义位置。
+                 */
+                .setHighlight(Highlight.oval())
+                /**
+                 * 设置指引View，可以是View也可以是Layout。
+                 */
                 .setView(R.layout.guide_0)
+                /**
+                 * 将设置的指引View或者layout通过ViewHolder的形式通过这个接口暴露。
+                 */
                 .setOnConvertListener(new AGuiderListener.OnConvertListener() {
                     @Override
                     public void convert(BaseViewHolder holder, GuiderView guiderView) {
                         holder.setText(R.id.tv_des, "骚年，没错，就是这里……");
                     }
                 })
-                .setOnGuideListener(new AGuiderListener.OnGuideListener() {
-                    @Override
-                    public void onStart(Guide guide) {
-                        KLog.e(TAG, "Guide--000--onStart…………");
-
-                    }
-
-                    @Override
-                    public void onStop(Guide guide) {
-                        KLog.e(TAG, "Guide--000--onStop…………");
-
-                    }
-                })
                 .build();
+
         Guide guide1 = new Guide.Builder()
                 .setPoint(imageView)
                 .setPosition(Position.bottomRight())
@@ -101,19 +105,6 @@ public class GuideFragment extends Fragment {
                         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) imageView.getLayoutParams();
                         layoutParams.gravity = Gravity.LEFT;
                         imageView.setLayoutParams(layoutParams);
-                    }
-                })
-                .setOnGuideListener(new AGuiderListener.OnGuideListener() {
-                    @Override
-                    public void onStart(Guide guide) {
-                        KLog.e(TAG, "Guide--111--onStart…………");
-
-                    }
-
-                    @Override
-                    public void onStop(Guide guide) {
-                        KLog.e(TAG, "Guide--111--onStop…………");
-
                     }
                 })
                 .setBackground(0x5000FF00)
@@ -131,39 +122,22 @@ public class GuideFragment extends Fragment {
                         ImageView imageView = holder.getView(R.id.iv_arrow);
                         imageView.setImageResource(R.drawable.arrow_bottom);
                     }
-                })
-                .setOnGuideListener(new AGuiderListener.OnGuideListener() {
-                    @Override
-                    public void onStart(Guide guide) {
-                        KLog.e(TAG, "Guide--222--onStart…………");
-
-                    }
-
-                    @Override
-                    public void onStop(Guide guide) {
-                        KLog.e(TAG, "Guide--222--onStop…………");
-
-                    }
-                })
-                .build();
+                }).build();
 
         new Guider.Builder()
+                /**
+                 * 设置锚点，可以是Activity、Fragment和任意View，最终都会找到其相应的Activity然后找到DecorView或者window对象，然后添加上去。
+                 */
                 .setAnchor(this)
+                /**
+                 * 如果是NEXT模式的话，先添加的先显示。还有addGuide()函数也可以添加Guide。
+                 */
                 .addGuides(guide0, guide1, guide2)
-                .setMode(Guider.MODE_NEXT)//MODE_NEXT：一个接着一个显示。MODE_TOGETHER：一起显示。
-                .addOnGuidertStartListener(new AGuiderListener.OnGuiderStartListener() {
-                    @Override
-                    public void onStart() {
-                        KLog.e(TAG, "onStart…………");
-                    }
-                })
-                .addOnGuidertStopListener(new AGuiderListener.OnGuiderStopListener() {
-                    @Override
-                    public void onStop() {
-                        KLog.e(TAG, "onStop…………");
-                    }
-                })
+                /**
+                 * Guider.MODE_NEXT表示一个接着一个显示，one by one.默认值。
+                 * Guider.MODE_TOGETHER表示多个Guide一起显示。
+                 */
+                .setMode(Guider.MODE_NEXT)
                 .show();
     }
-
 }

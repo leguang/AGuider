@@ -115,7 +115,7 @@ public class Guider {
     }
 
     public boolean isVisible() {
-        return guiderView.isVisible();
+        return guiderView != null && guiderView.isVisible();
     }
 
     public Guider addOnGuidertStartListener(AGuiderListener.OnGuiderStartListener listener) {

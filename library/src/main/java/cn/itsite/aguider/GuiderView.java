@@ -56,6 +56,7 @@ public class GuiderView extends FrameLayout implements ViewTreeObserver.OnGlobal
     }
 
     private void init() {
+        setTag(TAG);
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setColor(0xFFFFFFFF);
