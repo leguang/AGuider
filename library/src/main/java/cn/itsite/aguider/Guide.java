@@ -19,7 +19,7 @@ import cn.itsite.aguider.position.Position;
  * @E-mail langmanleguang@qq.com
  * @time 2016/11/24 0024 9:08
  */
-public class Guide implements IGuide {
+public class Guide {
     private int x;
     private int y;
     private View pointView;
@@ -226,7 +226,6 @@ public class Guide implements IGuide {
             this.targetLayoutId = 0;
             this.targetView = null;
             this.highlight = highlight;
-
             return this;
         }
 
