@@ -5,7 +5,7 @@
 AGuider是一个简单易用的构建新手引导的工具，可以让开发者只需要传入xml布局文件即可方便而又灵活地创建属于自己引导界面。（欢迎Star一下）
 ## 能做什么？([下载 apk](https://github.com/leguang/AGuider/blob/master/app/app-release.apk))
 - **只需要通过传入布局ID即可定制出自己的引导界面**
-- **有带遮罩+高亮和Popwindow两种**
+- **有带遮罩+高亮**
 - **默认提供一些动画**
 - **简洁的API，简单的配置**
 
@@ -25,7 +25,7 @@ AGuider是一个简单易用的构建新手引导的工具，可以让开发者�
 ```
 	dependencies {
 	     //新手引导工具，有带遮罩的和Popwindow两种。
-   		 compile 'com.github.leguang:AGuider:0.0.1'
+   		 compile 'com.github.leguang:AGuider:+'
 	}
 ```
 此时同步一下，即已完成引入。
@@ -33,69 +33,143 @@ AGuider是一个简单易用的构建新手引导的工具，可以让开发者�
 ### AGuider的简单使用：
 
 ```
-   new BaseDialog(this)
-        .setLayoutId(R.layout.share_layout)//传入你的xml布局。
-        .setConvertListener(new ADialogListener.OnDialogConvertListener() {
-            @Override
-            public void convert(BaseViewHolder holder, final Dialog dialog) {
-                //通过ViewHolder对View进行一些定制化。
-                holder.setOnClickListener(R.id.wechat, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showToast("点击关闭");
-                        dialog.dismiss();
-                    }
-                });
-            }
-        })
-        .setDimAmount(0.3f)//设置window的暗度。
-        .setGravity(Gravity.TOP)//位置有四种选择。
-        .setAnimStyle(R.style.SlideAnimation)//进入和退出动画。
-        .show();//显示。
-```
-
-### DialogFragment的简单使用：
-
-```
-    new BaseDialogFragment()
-           .setLayoutId(R.layout.share_layout)//传入你的xml布局。
-           .setConvertListener(new ADialogListener.OnDialogFragmentConvertListener() {
-               //通过ViewHolder对View进行一些定制化。
-               @Override
-               public void convert(BaseViewHolder holder, DialogFragment dialog) {
-                   holder.setOnClickListener(R.id.wechat, new View.OnClickListener() {
-                       @Override
-                       public void onClick(View view) {
-                           showToast("点了微信");
-                       }
-                   });
-               }
-           })
-           .setDimAmount(0.3f)//设置window的暗度。
-           .setGravity(Gravity.BOTTOM)//位置有多种选择。
-           .setAnimStyle(R.style.SlideAnimation)//进入和退出动画。
-           .show(getSupportFragmentManager(), "MyBaseDialogFragment");//显示。
+   new Guider.Builder()
+                   .setAnchor(this)
+                   .addGuide(new Guide.Builder()
+                           .setPoint(textView)
+                           .setPosition(Position.bottomLeft())
+                           .setView(R.layout.guide_0)
+                           .setOnConvertListener(new AGuiderListener.OnConvertListener() {
+                               @Override
+                               public void convert(BaseViewHolder holder, GuiderView guiderView) {
+                                   holder.setText(R.id.tv_des, "骚年，没错，就是这里……");
+                               }
+                           }).build())
+                   .addGuide(new Guide.Builder()
+                           .setPoint(imageView)
+                           .setPosition(Position.bottomRight())
+                           .setView(R.layout.guide_0)
+                           .setOnConvertListener(new AGuiderListener.OnConvertListener() {
+                               @Override
+                               public void convert(BaseViewHolder holder, GuiderView guiderView) {
+                                   holder.setText(R.id.tv_des, "对对对，你说的都对……");
+                                   ImageView imageView = holder.getView(R.id.iv_arrow);
+                                   imageView.setImageResource(R.drawable.arrow_topleft);
+                                   LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) imageView.getLayoutParams();
+                                   layoutParams.gravity = Gravity.LEFT;
+                                   imageView.setLayoutParams(layoutParams);
+                               }
+                           }).build())
+                   .addGuide(new Guide.Builder()
+                           .setPoint(button)
+                           .setPosition(Position.top())
+                           .setHighlight(Highlight.oval())
+                           .setView(R.layout.guide_1)
+                           .setOnConvertListener(new AGuiderListener.OnConvertListener() {
+                               @Override
+                               public void convert(BaseViewHolder holder, GuiderView guiderView) {
+                                   holder.setText(R.id.tv_des, "大爷，你终于来了……");
+                                   ImageView imageView = holder.getView(R.id.iv_arrow);
+                                   imageView.setImageResource(R.drawable.arrow_bottom);
+                               }
+                           }).build())
+                   .show();
 ```
 
 ### 用DialogFragment显示Dialog。
 ```
- AlertDialog alertDialog = new AlertDialog.Builder(this)
-                        .setTitle("注意：")
-                        .setMessage("是否退出应用？")
-                        .setPositiveButton("确定", null)
-                        .setNegativeButton("取消", null)
-                        .setCancelable(false)
-                        .create();
-
-                new BaseDialogFragment()
-                        .setDialog(alertDialog)
-                        .setGravity(Gravity.TOP)
-                        .show(getSupportFragmentManager());
+  Guider guider0 = new Guider.Builder()
+                 .setAnchor(this)
+                 .addGuide(new Guide.Builder()
+                         .setPoint(textView)
+                         .setPosition(Position.bottomLeft())
+                         .setView(R.layout.guide_0)
+                         .setOnConvertListener(new AGuiderListener.OnConvertListener() {
+                             @Override
+                             public void convert(BaseViewHolder holder, GuiderView guiderView) {
+                                 holder.setText(R.id.tv_des, "骚年，没错，就是这里……");
+                             }
+                         }).build())
+                 .addGuide(new Guide.Builder()
+                         .setPoint(imageView)
+                         .setPosition(Position.bottomRight())
+                         .setView(R.layout.guide_0)
+                         .setOnConvertListener(new AGuiderListener.OnConvertListener() {
+                             @Override
+                             public void convert(BaseViewHolder holder, GuiderView guiderView) {
+                                 holder.setText(R.id.tv_des, "对对对，你说的都对……");
+                                 ImageView imageView = holder.getView(R.id.iv_arrow);
+                                 imageView.setImageResource(R.drawable.arrow_topleft);
+                                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) imageView.getLayoutParams();
+                                 layoutParams.gravity = Gravity.LEFT;
+                                 imageView.setLayoutParams(layoutParams);
+                             }
+                         }).build())
+                 .addGuide(new Guide.Builder()
+                         .setPoint(button)
+                         .setPosition(Position.top())
+                         .setHighlight(Highlight.oval())
+                         .setView(R.layout.guide_1)
+                         .setOnConvertListener(new AGuiderListener.OnConvertListener() {
+                             @Override
+                             public void convert(BaseViewHolder holder, GuiderView guiderView) {
+                                 holder.setText(R.id.tv_des, "大爷，你终于来了……");
+                                 ImageView imageView = holder.getView(R.id.iv_arrow);
+                                 imageView.setImageResource(R.drawable.arrow_bottom);
+                             }
+                         }).build())
+                 .build();
+ 
+         Guider guider1 = new Guider.Builder()
+                 .setAnchor(this)
+                 .setMode(Guider.MODE_TOGETHER)
+                 .addGuide(new Guide.Builder()
+                         .setPoint(textView)
+                         .setPosition(Position.bottomLeft())
+                         .setView(R.layout.guide_0)
+                         .setOnConvertListener(new AGuiderListener.OnConvertListener() {
+                             @Override
+                             public void convert(BaseViewHolder holder, GuiderView guiderView) {
+                                 holder.setText(R.id.tv_des, "骚年，没错，就是这里……");
+                             }
+                         }).build())
+                 .addGuide(new Guide.Builder()
+                         .setPoint(imageView)
+                         .setPosition(Position.bottomRight())
+                         .setView(R.layout.guide_0)
+                         .setOnConvertListener(new AGuiderListener.OnConvertListener() {
+                             @Override
+                             public void convert(BaseViewHolder holder, GuiderView guiderView) {
+                                 holder.setText(R.id.tv_des, "对对对，你说的都对……");
+                                 ImageView imageView = holder.getView(R.id.iv_arrow);
+                                 imageView.setImageResource(R.drawable.arrow_topleft);
+                                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) imageView.getLayoutParams();
+                                 layoutParams.gravity = Gravity.LEFT;
+                                 imageView.setLayoutParams(layoutParams);
+                             }
+                         }).build())
+                 .addGuide(new Guide.Builder()
+                         .setPoint(button)
+                         .setPosition(Position.top())
+                         .setHighlight(Highlight.oval())
+                         .setView(R.layout.guide_1)
+                         .setOnConvertListener(new AGuiderListener.OnConvertListener() {
+                             @Override
+                             public void convert(BaseViewHolder holder, GuiderView guiderView) {
+                                 holder.setText(R.id.tv_des, "大爷，你终于来了……");
+                                 ImageView imageView = holder.getView(R.id.iv_arrow);
+                                 imageView.setImageResource(R.drawable.arrow_bottom);
+                             }
+                         }).build())
+                 .build();
+ 
+         new AGuider.Builder()
+                 .addGuiders(guider0, guider1)
+                 .show();
 ```
-Demo中有更多使用实例。
 
 ## 高级用法：
-当然你也可以通过继承Dialog或者BaseDialogFragment来改造属于自己的对话框。
+Demo中有更多使用实例。
 
 >**持续更新!，欢迎Issues+Star项目**
 
